@@ -1,0 +1,78 @@
+<div class="gr-search">
+
+    <ng-container *ngIf="isChecked === false">
+        <mat-form-field appearance="outline">
+            <mat-label>Номер заказа</mat-label>
+            <input type="number" matInput placeholder="Введите номер заказа"
+                (input)="onInputSearchData($event.target.value)" #numOrder min="0" (keyup.enter)="onSearchOrder()">
+            <mat-icon id="close" matSuffix *ngIf="numOrder.value.length > 0"
+                (click)="onClearNumOrder(); numOrder.value = ''">close</mat-icon>
+        </mat-form-field>
+        <button class="bt-search" mat-stroked-button [disabled]="!numOrder.value || pause" (click)="onSearchOrder()">
+            <mat-icon>search</mat-icon>
+        </button>
+    </ng-container>
+
+    <ng-container *ngIf="isChecked === true">
+        <mat-form-field appearance="outline">
+            <mat-label>Адрес</mat-label>
+            <input type="text" matInput placeholder="Введите адрес" #adresOrder
+                (input)="onInputSearchData($event.target.value)" (keyup.enter)="onSearchOrder()">
+        </mat-form-field>
+        <button class="bt-search" mat-stroked-button [disabled]="!adresOrder.value || pause" (click)="onSearchOrder()">
+            <mat-icon>search</mat-icon>
+        </button>
+    </ng-container>
+
+    <span> Список заказов обновится через: {{timerValue}} </span>
+
+    <button class="bt-search" mat-stroked-button *ngIf="checkedOrders" (click)="onListOrdersPauseOrGo()">
+        <mat-icon>pause</mat-icon>
+    </button>
+    <div class="search-adres">
+        <mat-slide-toggle [(ngModel)]="isChecked" *ngIf='isAdminIshop'>
+            Поиск по адресу
+        </mat-slide-toggle>
+    </div>
+</div>
+
+<mat-tab-group [(selectedIndex)]="tabIndex" (selectedTabChange)="selectedTab($event)">
+    <mat-tab label="Все">
+        <app-order-list-form [data]="'%'" (onChanged)="onChanged($event)"></app-order-list-form>
+    </mat-tab>
+    <mat-tab label="Брест">
+        <app-order-list-form *ngIf="tabIndex === 1" [data]="'11'" (onChanged)="onChanged($event)"></app-order-list-form>
+    </mat-tab>
+    <mat-tab label="Долгиновский">
+        <app-order-list-form *ngIf="tabIndex === 2" [data]="'8'" (onChanged)="onChanged($event)"></app-order-list-form>
+    </mat-tab>
+    <mat-tab label="Каменногорская">
+        <app-order-list-form *ngIf="tabIndex === 3" [data]="'22'" (onChanged)="onChanged($event)"></app-order-list-form>
+    </mat-tab>
+    <mat-tab label="Молодечно">
+        <app-order-list-form *ngIf="tabIndex === 4" [data]="'25'" (onChanged)="onChanged($event)"></app-order-list-form>
+    </mat-tab>
+    <mat-tab label="Тимирязева">
+        <app-order-list-form *ngIf="tabIndex === 5" [data]="'21'" (onChanged)="onChanged($event)"></app-order-list-form>
+    </mat-tab>
+    <mat-tab label="Диамант">
+        <app-order-list-form *ngIf="tabIndex === 6" [data]="'31'" (onChanged)="onChanged($event)"></app-order-list-form>
+    </mat-tab>
+    <mat-tab label="Гродно">
+        <app-order-list-form *ngIf="tabIndex === 7" [data]="'33'" (onChanged)="onChanged($event)"></app-order-list-form>
+    </mat-tab>
+    <mat-tab label="МОМО">
+        <app-order-list-form *ngIf="tabIndex === 8" [data]="'18'" (onChanged)="onChanged($event)"></app-order-list-form>
+    </mat-tab>
+    <mat-tab label="Независимости">
+        <app-order-list-form *ngIf="tabIndex === 9" [data]="'24'" (onChanged)="onChanged($event)"></app-order-list-form>
+    </mat-tab>
+    <mat-tab label="Жуково">
+        <app-order-list-form *ngIf="tabIndex === 10" [data]="'32'" (onChanged)="onChanged($event)">
+        </app-order-list-form>
+    </mat-tab>
+    <mat-tab label="Экспобел">
+        <app-order-list-form *ngIf="tabIndex === 11" [data]="'34'" (onChanged)="onChanged($event)">
+        </app-order-list-form>
+    </mat-tab>
+</mat-tab-group>
