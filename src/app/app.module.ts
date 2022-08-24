@@ -2,9 +2,12 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxPrintModule } from 'ngx-print';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
+import { SmoothScrollModule } from 'ngx-scrollbar/smooth-scroll';
 // -----------------------------------------------------------------------------------------
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu'
@@ -22,12 +25,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-// -----------------------------------------------------------------------------------------
-import { NgxPrintModule } from 'ngx-print';
-import { NgScrollbarModule } from 'ngx-scrollbar';
-import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
-import { SmoothScrollModule } from 'ngx-scrollbar/smooth-scroll';
-import { NgScrollbar } from 'ngx-scrollbar';
 // -----------------------------------------------------------------------------------------
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
