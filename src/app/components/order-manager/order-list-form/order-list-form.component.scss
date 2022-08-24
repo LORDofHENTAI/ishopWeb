@@ -193,3 +193,17 @@ mat-form-field {
     position: relative;
     top: 5px;
 }
+
+.order-info-conteiner{
+    position: absolute;
+    padding: 10px 10px;
+    background-color: rgba(255, 255, 255, 0.808);
+    min-width: 20vw;
+    min-height: 10vh;
+    border-radius: 20px;
+    animation: ani 0.8s forwards;
+}
+@keyframes ani {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+  }

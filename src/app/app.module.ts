@@ -53,6 +53,7 @@ import { OrdersInAssemblyComponent } from './components/order-manager/order-type
 import { OrdersReadyShipmentComponent } from './components/order-manager/order-types/orders-ready-shipment/orders-ready-shipment.component';
 import { OrdersUncompletedComponent } from './components/order-manager/order-types/orders-uncompleted/orders-uncompleted.component';
 import { EmptyFormComponent } from './components/empty-form/empty-form.component';
+import { ShowDataOrderFormComponent } from './components/order-manager/order-list-form/show-data-order-form/show-data-order-form.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { EmptyFormComponent } from './components/empty-form/empty-form.component
     OrdersInAssemblyComponent,
     OrdersReadyShipmentComponent,
     OrdersUncompletedComponent,
-    EmptyFormComponent
+    EmptyFormComponent,
+    ShowDataOrderFormComponent
   ],
   imports: [
     BrowserModule,

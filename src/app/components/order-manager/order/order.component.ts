@@ -133,14 +133,16 @@ export class OrderComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle(this.titleService.getTitle() + ' №' + this.orderId);
     let orderBodyReq = new OrderBodyReq(this.tokenService.getToken(), this.orderId)
-    this.orderService.getSuborder(orderBodyReq).subscribe(response => {
-      if (response) {
-        this.getData(response);
-      }
-    },
-      error => {
+    this.orderService.getSuborder(orderBodyReq).subscribe({
+      next: response => {
+        if (response) {
+          this.getData(response);
+        }
+      },
+      error: error => {
         console.log(error);
-      });
+      }
+    });
     console.log();
   }
 
@@ -171,14 +173,16 @@ export class OrderComponent implements OnInit {
       if (response.status === 'true') {
         this.snackbarService.openSnackBar('Штрихкод Белпочты удален', this.action,);
         let orderBodyReq = new OrderBodyReq(this.tokenService.getToken(), this.orderId)
-        this.orderService.getSuborder(orderBodyReq).subscribe(response => {
-          if (response) {
-            this.getData(response);
-          }
-        },
-          error => {
+        this.orderService.getSuborder(orderBodyReq).subscribe({
+          next: response => {
+            if (response) {
+              this.getData(response);
+            }
+          },
+          error: error => {
             console.log(error);
-          });
+          }
+        });
       }
       else this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
     },
@@ -279,32 +283,34 @@ export class OrderComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result >= 1 && result <= 4) {
         let belPostReq = new BelPostReq(this.tokenService.getToken(), this.orderBodyAnsw.sub_num, result)
-        this.orderService.getBarcode(belPostReq).subscribe(response => {
-          if (response) {
-            this.belPostAnsw = response;
-            let t = timer(0, 100).subscribe(vl => {
-              console.log(vl);
-              if (vl >= 10) {
-                this.barcodePrint._elementRef.nativeElement.click();
-                t.unsubscribe();
-                let orderBodyReq = new OrderBodyReq(this.tokenService.getToken(), this.orderId)
-                this.orderService.getSuborder(orderBodyReq).subscribe({
-                  next: response => {
-                    if (response) {
-                      this.getData(response);
+        this.orderService.getBarcode(belPostReq).subscribe({
+          next: response => {
+            if (response) {
+              this.belPostAnsw = response;
+              let t = timer(0, 100).subscribe(vl => {
+                console.log(vl);
+                if (vl >= 10) {
+                  this.barcodePrint._elementRef.nativeElement.click();
+                  t.unsubscribe();
+                  let orderBodyReq = new OrderBodyReq(this.tokenService.getToken(), this.orderId)
+                  this.orderService.getSuborder(orderBodyReq).subscribe({
+                    next: response => {
+                      if (response) {
+                        this.getData(response);
+                      }
+                    },
+                    error: error => {
+                      console.log(error);
                     }
-                  },
-                  error: error => {
-                    console.log(error);
-                  }
-                });
-              }
-            });
-          }
-        },
-          error => {
+                  });
+                }
+              });
+            }
+          },
+          error: error => {
             console.log(error);
-          });
+          }
+        });
       }
     });
   }

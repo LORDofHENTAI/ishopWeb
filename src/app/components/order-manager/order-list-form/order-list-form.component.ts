@@ -19,8 +19,6 @@ import { ConfirmReturnProductComponent } from '../dialog-windows/confirm-return-
 import { environment } from 'src/environments/environment';
 import { FindOrderByAdReq } from 'src/app/models/order-models/find-order-by-ad-req';
 import { element } from 'protractor';
-import { SmoothScrollModule } from 'ngx-scrollbar/smooth-scroll';
-
 
 @Component({
   selector: 'app-order-list-form',
@@ -108,29 +106,33 @@ export class OrderListFormComponent implements OnInit {
   loadData(value) {
     if (!value) {
       let orderListReq = new OrderListReq(this.tokenService.getToken(), this.data ?? '%', this.getStatus() ?? 'gs', this.countRecord.toString());
-      this.orderService.getOrders(orderListReq).subscribe(response => {
-        if (response) {
-          this.orderListAnsw = response;
-          console.log(this.orderListAnsw);
-        }
-      },
-        error => {
+      this.orderService.getOrders(orderListReq).subscribe({
+        next: response => {
+          if (response) {
+            this.orderListAnsw = response;
+            console.log(this.orderListAnsw);
+          }
+        },
+        error: error => {
           console.log(error);
           this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
-        });
+        }
+      });
     }
     else {
       if (this.data === this.getShop(value)) {
         let orderListReq = new OrderListReq(this.tokenService.getToken(), this.data, this.getStatus() ?? 'gs', this.countRecord.toString());
-        this.orderService.getOrders(orderListReq).subscribe(response => {
-          if (response) {
-            this.orderListAnsw = response;
-          }
-        },
-          error => {
+        this.orderService.getOrders(orderListReq).subscribe({
+          next: response => {
+            if (response) {
+              this.orderListAnsw = response;
+            }
+          },
+          error: error => {
             console.log(error);
             this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
-          });
+          }
+        });
       }
     }
   }
@@ -152,15 +154,17 @@ export class OrderListFormComponent implements OnInit {
       this.countRecord = this.countRecord + 40;
       this.scrollHeight = this.scrollHeight + this.countRecord;
       let orderListReq = new OrderListReq(this.tokenService.getToken(), this.data ?? '%', this.getStatus() ?? 'gs', this.countRecord.toString());
-      this.orderService.getOrders(orderListReq).subscribe(response => {
-        if (response) {
-          this.orderListAnsw = this.orderListAnsw.concat(response);
-        }
-      },
-        error => {
+      this.orderService.getOrders(orderListReq).subscribe({
+        next: response => {
+          if (response) {
+            this.orderListAnsw = this.orderListAnsw.concat(response);
+          }
+        },
+        error: error => {
           console.log(error);
           this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
-        });
+        }
+      });
     }
   }
 
@@ -178,27 +182,30 @@ export class OrderListFormComponent implements OnInit {
         this.searchValue = searchValue;
         if (this.searchValue.check === false) {
           let findOrderReq = new FindOrderReq(this.tokenService.getToken(), searchValue.order, this.data);
-          this.orderService.orderSearch(findOrderReq).subscribe(response => {
-            if (response) {
-              this.orderListAnsw = response;
-            }
-          },
-            error => {
+          this.orderService.orderSearch(findOrderReq).subscribe({
+            next: response => {
+              if (response) {
+                this.orderListAnsw = response;
+              }
+            },
+            error: error => {
               console.log(error);
               this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
-            });
+            }
+          });
         } else {
           let findOrderByAd = new FindOrderByAdReq(this.tokenService.getToken(), searchValue.order, this.data);
-          this.orderService.orderSearchByAdres(findOrderByAd).subscribe(response => {
-            if (response) {
-              this.orderListAnsw = response;
-              console.log('>>>>>' + this.orderListAnsw);
-            }
-          },
-            error => {
+          this.orderService.orderSearchByAdres(findOrderByAd).subscribe({
+            next: response => {
+              if (response) {
+                this.orderListAnsw = response;
+              }
+            },
+            error: error => {
               console.log(error);
               this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
-            });
+            }
+          });
         }
       }
     } else {
@@ -208,18 +215,20 @@ export class OrderListFormComponent implements OnInit {
 
   onClickPauseOrGo(element: OrderListAnsw) {
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
-    this.orderService.orderPause(pauseOrderReq).subscribe(response => {
-      if (response.status) {
-        if (element.status === 'не принят')
-          element.status = 'ОТЛОЖЕН';
-        else
-          if (element.status === 'ОТЛОЖЕН')
-            element.status = 'не принят';
-      }
-    },
-      error => {
+    this.orderService.orderPause(pauseOrderReq).subscribe({
+      next: response => {
+        if (response.status) {
+          if (element.status === 'не принят')
+            element.status = 'ОТЛОЖЕН';
+          else
+            if (element.status === 'ОТЛОЖЕН')
+              element.status = 'не принят';
+        }
+      },
+      error: error => {
         console.log(error);
-      });
+      }
+    });
   }
 
   onClickShow(id) {
@@ -239,15 +248,17 @@ export class OrderListFormComponent implements OnInit {
       }
     });
     let toCassa = new ToCassa(this.tokenService.getToken(), element.order.num, element.order.sub_num);
-    this.orderService.orderWriteToCashbox(toCassa).subscribe(response => {
-      if (response.status === 'true') {
-        this.snackbarService.openSnackBar('Заказ записан в кассу!', this.action);
-      }
-    },
-      error => {
+    this.orderService.orderWriteToCashbox(toCassa).subscribe({
+      next: response => {
+        if (response.status === 'true') {
+          this.snackbarService.openSnackBar('Заказ записан в кассу!', this.action);
+        }
+      },
+      error: error => {
         console.log(error);
         this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
-      });
+      }
+    });
   }
 
   turnOnCheckColumn(e) {
@@ -283,68 +294,74 @@ export class OrderListFormComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
-        this.orderService.orderReturn(pauseOrderReq).subscribe(response => {
-          switch (response.status) {
-            case 'auth error':
-              this.snackbarService.openSnackBar('Неверная идентификация.', this.action, this.styleNoConnect);
-              break;
+        this.orderService.orderReturn(pauseOrderReq).subscribe({
+          next: response => {
+            switch (response.status) {
+              case 'auth error':
+                this.snackbarService.openSnackBar('Неверная идентификация.', this.action, this.styleNoConnect);
+                break;
 
-            case 'fail':
-              this.snackbarService.openSnackBar('Неверный запрос.', this.action, this.styleNoConnect);
-              break;
+              case 'fail':
+                this.snackbarService.openSnackBar('Неверный запрос.', this.action, this.styleNoConnect);
+                break;
 
-            case 'false ':
-              this.snackbarService.openSnackBar('Подзаказ не найден.', this.action, this.styleNoConnect);
-              break;
+              case 'false ':
+                this.snackbarService.openSnackBar('Подзаказ не найден.', this.action, this.styleNoConnect);
+                break;
 
-            case 'status error':
-              this.snackbarService.openSnackBar('Статус заказа не соотвествует.', this.action, this.styleNoConnect);
-              break;
+              case 'status error':
+                this.snackbarService.openSnackBar('Статус заказа не соотвествует.', this.action, this.styleNoConnect);
+                break;
 
-            case 'returned already':
-              this.snackbarService.openSnackBar('Подзаказ был уже возвращен', this.action, this.styleNoConnect);
-              break;
+              case 'returned already':
+                this.snackbarService.openSnackBar('Подзаказ был уже возвращен', this.action, this.styleNoConnect);
+                break;
 
-            default:
-              this.snackbarService.openSnackBar('Подзаказ возвращен', this.action);
-              break;
-          }
-        },
-          error => {
+              default:
+                this.snackbarService.openSnackBar('Подзаказ возвращен', this.action);
+                break;
+            }
+          },
+          error: error => {
             console.log(error);
-          });
+          }
+        });
       }
     });
   }
 
   onClickReturnToAssembly(id) {
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), id);
-    this.orderService.orderReturnToAssembly(pauseOrderReq).subscribe(response => {
-      if (response.status === 'true')
-        this.snackbarService.openSnackBar('Подзаказ возвращен в сборку', this.action,);
-      else this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
-    },
-      error => {
+    this.orderService.orderReturnToAssembly(pauseOrderReq).subscribe({
+      next: response => {
+        if (response.status === 'true')
+          this.snackbarService.openSnackBar('Подзаказ возвращен в сборку', this.action,);
+        else this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
+      },
+      error: error => {
         console.log(error);
         this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
-      });
+      }
+    });
   }
 
   onDelete(element: OrderListAnsw) {
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
-    this.orderService.orderDelete(pauseOrderReq).subscribe(response => {
-      if (response.status === 'true') {
-        this.snackbarService.openSnackBar('Подзаказ удален', this.action,);
-        if (this.searchValue)
-          this.searchOrder(this.searchValue);
-        else this.loadData(null);
-      }
-      else this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
-    },
-      error => {
+    this.orderService.orderDelete(pauseOrderReq).subscribe({
+      next: response => {
+        if (response.status === 'true') {
+          this.snackbarService.openSnackBar('Подзаказ удален', this.action,);
+          if (this.searchValue)
+            this.searchOrder(this.searchValue);
+          else this.loadData(null);
+        }
+        else this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
+      },
+      error: error => {
         console.log(error);
         this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
-      });
+      }
+    });
   }
 
   getAdminIshop(): boolean {
@@ -361,15 +378,17 @@ export class OrderListFormComponent implements OnInit {
       }
     });
     let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
-    this.orderService.orderSendToBitrix(findOrderReq).subscribe(response => {
-      if (response.status) {
-        this.snackbarService.openSnackBar(response.status, this.action);
-      }
-    },
-      error => {
+    this.orderService.orderSendToBitrix(findOrderReq).subscribe({
+      next: response => {
+        if (response.status) {
+          this.snackbarService.openSnackBar(response.status, this.action);
+        }
+      },
+      error: error => {
         console.log(error);
         this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
-      });
+      }
+    });
   }
 
   onColickCompleteOrder(element: OrderListAnsw) {
@@ -382,14 +401,16 @@ export class OrderListFormComponent implements OnInit {
     //   }
     // });
     // let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
-    // this.orderService.orderCompliteOrder(findOrderReq).subscribe(response =>{
+    // this.orderService.orderCompliteOrder(findOrderReq).subscribe({
+    // next: response => {
     //   if(response.status){
     //     this.snackbarService.openSnackBar(response.status, this.action);
     //   }
     // },
-    // error => {
+    // error: error => {
     //   console.log(error);
     //   this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
+    // }
     // });
     this.snackbarService.openSnackBar('coming soon', this.action);
   }
@@ -398,4 +419,11 @@ export class OrderListFormComponent implements OnInit {
     this.data = '';
   }
 
+  sub_order_id: any;
+  ShowDialogDataOrder(element) {
+    element.isActive = true;
+  }
+  HideDialogDataOrder(element) {
+    element.isActive = false;
+  }
 }
