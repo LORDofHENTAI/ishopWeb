@@ -4,7 +4,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // -----------------------------------------------------------------------------------------
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu'
@@ -19,10 +19,15 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 // -----------------------------------------------------------------------------------------
 import { NgxPrintModule } from 'ngx-print';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
+import { SmoothScrollModule } from 'ngx-scrollbar/smooth-scroll';
+import { NgScrollbar } from 'ngx-scrollbar';
 // -----------------------------------------------------------------------------------------
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -40,6 +45,14 @@ import { PrintBelpostBarcodeComponent } from './components/order-manager/dialog-
 import { OrderComponent } from './components/order-manager/order/order.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { BarcodePrintFormComponent } from './components/order-manager/barcode-print-form/barcode-print-form.component';
+import { OrdersReadyBuildComponent } from './components/order-manager/order-types/orders-ready-build/orders-ready-build.component';
+import { OrdersArchiveComponent } from './components/order-manager/order-types/orders-archive/orders-archive.component';
+import { OrderPrintFormComponent } from './components/order-manager/order-print-form/order-print-form.component';
+import { OrderCanceledComponent } from './components/order-manager/order-types/order-canceled/order-canceled.component';
+import { OrdersInAssemblyComponent } from './components/order-manager/order-types/orders-in-assembly/orders-in-assembly.component';
+import { OrdersReadyShipmentComponent } from './components/order-manager/order-types/orders-ready-shipment/orders-ready-shipment.component';
+import { OrdersUncompletedComponent } from './components/order-manager/order-types/orders-uncompleted/orders-uncompleted.component';
+import { EmptyFormComponent } from './components/empty-form/empty-form.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +69,15 @@ import { BarcodePrintFormComponent } from './components/order-manager/barcode-pr
     BarcodeInputCountFormComponent,
     PrintBelpostBarcodeComponent,
     OrderComponent,
-    BarcodePrintFormComponent
+    BarcodePrintFormComponent,
+    OrdersReadyBuildComponent,
+    OrdersArchiveComponent,
+    OrderPrintFormComponent,
+    OrderCanceledComponent,
+    OrdersInAssemblyComponent,
+    OrdersReadyShipmentComponent,
+    OrdersUncompletedComponent,
+    EmptyFormComponent
   ],
   imports: [
     BrowserModule,
@@ -79,12 +100,21 @@ import { BarcodePrintFormComponent } from './components/order-manager/barcode-pr
     MatChipsModule,
     NgxPrintModule,
     NgScrollbarModule,
+    ReactiveFormsModule,
     ConfirmationPopoverModule.forRoot({
       confirmButtonType: 'danger',
     }),
+    MatDialogModule,
+    MatSlideToggleModule,
+    MatCheckboxModule,
+    SmoothScrollModule,
 
   ],
   providers: [HttpClient, Title, CookieService],
+  entryComponents: [
+    BarcodeInputCountFormComponent,
+    ConfirmReturnProductComponent,
+  ],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA],
 })

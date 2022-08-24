@@ -18,6 +18,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmReturnProductComponent } from '../dialog-windows/confirm-return-product/confirm-return-product.component';
 import { environment } from 'src/environments/environment';
 import { FindOrderByAdReq } from 'src/app/models/order-models/find-order-by-ad-req';
+import { element } from 'protractor';
+import { SmoothScrollModule } from 'ngx-scrollbar/smooth-scroll';
+
 
 @Component({
   selector: 'app-order-list-form',
@@ -26,12 +29,12 @@ import { FindOrderByAdReq } from 'src/app/models/order-models/find-order-by-ad-r
 })
 export class OrderListFormComponent implements OnInit {
 
-  @Input() data!: string;
+  @Input() data: string;
   @Output() onChanged = new EventEmitter<Array<OrderListAnsw>>();
 
 
 
-  @ViewChild(NgScrollbar) scrollbarRef!: NgScrollbar;
+  @ViewChild(NgScrollbar) scrollbarRef: NgScrollbar;
 
   orderListAnsw: Array<OrderListAnsw> = [];
   idShops: Array<any> = [
@@ -102,7 +105,7 @@ export class OrderListFormComponent implements OnInit {
     this.isAdminIshop = this.getAdminIshop();
   }
 
-  loadData(value: any) {
+  loadData(value) {
     if (!value) {
       let orderListReq = new OrderListReq(this.tokenService.getToken(), this.data ?? '%', this.getStatus() ?? 'gs', this.countRecord.toString());
       this.orderService.getOrders(orderListReq).subscribe(response => {
@@ -136,7 +139,7 @@ export class OrderListFormComponent implements OnInit {
     this.scrollbarRef.scrolled.subscribe(e => { console.log(e); this.onScroll(e) });
   }
 
-  onScroll($event: any) {
+  onScroll($event) {
     let tempScrollPercent = $event.currentTarget.scrollTop * 100 / this.scrollHeight;
     if (tempScrollPercent > 85) {
       this.dynamicLoadScroll();
@@ -165,7 +168,7 @@ export class OrderListFormComponent implements OnInit {
     return this.listStatus.find(element => element.path === this.location.path()).status;
   }
 
-  getShop(index: any) {
+  getShop(index) {
     return index ? this.idShops.find(element => element.index === index).id : '%';
   }
 
@@ -219,7 +222,7 @@ export class OrderListFormComponent implements OnInit {
       });
   }
 
-  onClickShow(id: any) {
+  onClickShow(id) {
     const url = this.router.serializeUrl(
       this.router.createUrlTree([`/order/${id}`])
     );
@@ -247,7 +250,7 @@ export class OrderListFormComponent implements OnInit {
       });
   }
 
-  turnOnCheckColumn(e: any) {
+  turnOnCheckColumn(e) {
     this.checkColumn = e;
     if (e === false) {
       this.cleanListOrders();
@@ -314,7 +317,7 @@ export class OrderListFormComponent implements OnInit {
     });
   }
 
-  onClickReturnToAssembly(id: any) {
+  onClickReturnToAssembly(id) {
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), id);
     this.orderService.orderReturnToAssembly(pauseOrderReq).subscribe(response => {
       if (response.status === 'true')

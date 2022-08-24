@@ -21,6 +21,7 @@ import { timer } from 'rxjs';
 import { Changer } from 'src/app/models/order-models/changer';
 import { SnakebarService } from 'src/app/services/snakebar/snakebar.service';
 import { DelPostRequest } from 'src/app/models/order-models/del-post-request';
+import { element } from 'protractor';
 
 export interface BelpostData {
   barcode: string,
@@ -55,8 +56,8 @@ export class OrderComponent implements OnInit {
   belpostData: BelpostData;
 
   orderBodyAnsw: OrderBodyAnsw = new OrderBodyAnsw('', '', '', false, '', new ClientInfo('', '', ''), [new OrderBody('', '', '', '', '0', '0', '0', false, '', '', '')], []);
-  countReadyСhange!: number;
-  belPostAnsw!: BelPostAnsw | null;
+  countReadyСhange: number;
+  belPostAnsw: BelPostAnsw | null;
   splitElement = ';';
 
   messageNoConnect = 'Нет соединения, попробуйте позже.';
@@ -68,7 +69,7 @@ export class OrderComponent implements OnInit {
   removable = true;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fruitCtrl = new FormControl();
-  filteredFruits!: Observable<string[]>;
+  filteredFruits: Observable<string[]>;
   fruits: string[] = [];
   allFruits: string[] = [' 01Bepx', ' 01Hu3', ' 02Bepx', ' 03Bepx', ' 04Bepx', ' 05Hu3', ' colona1', ' D03Bepx', ' Poddon', ' Telezka', 'A0', 'A00', 'A001', 'A002', 'A003', 'A004', 'A005', 'A006', 'A008', 'A009', 'A010', 'A029', 'A030', 'A031', 'A032', 'A033', 'A034', 'B001'];
 
@@ -247,19 +248,21 @@ export class OrderComponent implements OnInit {
 
     let order = new Changer(this.tokenService.getToken(), this.orderBodyAnsw);
 
-    this.orderService.orderSaveChange(order).subscribe(response => {
-      if (response.status === 'Complate') {
-        this.snackbarService.openSnackBar('Количество изменено', this.action);
+    this.orderService.orderSaveChange(order).subscribe({
+      next: response => {
+        if (response.status === 'Complate') {
+          this.snackbarService.openSnackBar('Количество изменено', this.action);
 
-      }
-      if (response.status === 'fail') {
-        this.snackbarService.openSnackBar('Перезагрузите страницу', this.action);
-      }
-    },
-      error => {
+        }
+        if (response.status === 'fail') {
+          this.snackbarService.openSnackBar('Перезагрузите страницу', this.action);
+        }
+      },
+      error: error => {
         console.log(error);
         this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
-      });
+      }
+    });
   }
 
   checkDataChanged(): boolean {
@@ -285,14 +288,16 @@ export class OrderComponent implements OnInit {
                 this.barcodePrint._elementRef.nativeElement.click();
                 t.unsubscribe();
                 let orderBodyReq = new OrderBodyReq(this.tokenService.getToken(), this.orderId)
-                this.orderService.getSuborder(orderBodyReq).subscribe(response => {
-                  if (response) {
-                    this.getData(response);
-                  }
-                },
-                  error => {
+                this.orderService.getSuborder(orderBodyReq).subscribe({
+                  next: response => {
+                    if (response) {
+                      this.getData(response);
+                    }
+                  },
+                  error: error => {
                     console.log(error);
-                  });
+                  }
+                });
               }
             });
           }

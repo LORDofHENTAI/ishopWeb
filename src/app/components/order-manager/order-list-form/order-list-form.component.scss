@@ -1,5 +1,5 @@
 .table-container {
-    height: 80vh;
+    height: 79vh;
 }
 table {
     width: 100%;
@@ -7,10 +7,14 @@ table {
 }
 ng-scrollbar {
     --scrollbar-size: 8px;
-    --scrollbar-thumb-color: rgba(94, 175, 255, 0.5);
-    --scrollbar-thumb-hover-color: dodgerblue;
+    --scrollbar-thumb-color: rgba(97, 70, 181, 0.5);
+    --scrollbar-thumb-hover-color: rgb(97, 70, 181);
     --scrollbar-border-radius: 4px;
     // border: 1px solid gray;
+}
+a{
+    text-decoration: none;
+    color: #007bff;
 }
 .mat-icon#close:hover {
     cursor: pointer;
