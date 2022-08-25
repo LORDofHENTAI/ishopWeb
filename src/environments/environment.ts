@@ -8,7 +8,7 @@ export const environment = {
   apiUrl: 'http://192.168.1.232:120',
   apiUrlImg: 'https://mile.by/gtools/getImg/index.php',
   cookieName: 'user-ishope-mile',
-  listAdminsIshop: ['maksimovich_v', 'shegolov_a', 'orlova_v', 'gurinenko_n', 'Sincova_e', 'sincova_e', 'log-test-1', 'log-test-2', 'bondarenko_v', 'fesko_n'],
+  listAdminsIshop: ['maksimovich_v', 'shegolov_a', 'orlova_v', 'bondarenko_v', 'fesko_n'],
 };
 
 /*
