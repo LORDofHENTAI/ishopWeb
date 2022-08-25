@@ -10,7 +10,7 @@ import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 import { SmoothScrollModule } from 'ngx-scrollbar/smooth-scroll';
 // -----------------------------------------------------------------------------------------
 import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu'
+import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -25,6 +25,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+// -----------------------------------------------------------------------------------------
+import { CompliteDialog } from './components/order-manager/order-list-form/order-list-form.component';
+import { DeleteDialog } from './components/order-manager/order-list-form/order-list-form.component';
 // -----------------------------------------------------------------------------------------
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -76,7 +79,9 @@ import { ShowDataOrderFormComponent } from './components/order-manager/order-lis
     OrdersReadyShipmentComponent,
     OrdersUncompletedComponent,
     EmptyFormComponent,
-    ShowDataOrderFormComponent
+    ShowDataOrderFormComponent,
+    CompliteDialog,
+    DeleteDialog
   ],
   imports: [
     BrowserModule,
@@ -109,7 +114,7 @@ import { ShowDataOrderFormComponent } from './components/order-manager/order-lis
     SmoothScrollModule,
 
   ],
-  providers: [HttpClient, Title, CookieService],
+  providers: [HttpClient, Title, CookieService, OrderListFormComponent],
   entryComponents: [
     BarcodeInputCountFormComponent,
     ConfirmReturnProductComponent,

@@ -162,22 +162,22 @@
                             <span style="color: rgb(255, 166, 0);">Оправить в OMS</span>
                         </button>
 
-                        <button mat-menu-item *ngIf="isAdminIshop" id="butt-cancel" color="primary"
-                            class="btn btn-default" mwlConfirmationPopover
-                            [popoverMessage]="'Вы действительно хотите <b>удалить</b> подзаказ?'" [confirmText]="'Да'"
-                            [cancelText]="'Нет'" placement="left" (click)="$event.stopPropagation();"
-                            (confirm)="onDelete(element)" (cancel)="cancelClicked = true">
-                            <mat-icon style="color: red;">delete_forever</mat-icon>
-                            <span style="color: red;">Удалить</span>
+                        <button mat-menu-item *ngIf="isAdminIshop" (click)="openDeleteDialog(element)">
+                            <mat-icon style="color: red;">
+                                delete_forever
+                            </mat-icon>
+                            <span style="color: red;">
+                                Удалить
+                            </span>
                         </button>
-                        <button mat-menu-item *ngIf="(element.status === 'завершен')" color="primary"
-                            class="btn btn-default" mwlConfirmationPopover
-                            [popoverMessage]="'Вы действительно хотите <b>завершить</b> подзаказ?'" [confirmText]="'Да'"
-                            [cancelText]="'Нет'" placement="left" confirmButtonType="success"
-                            (click)="$event.stopPropagation()" (cancel)="cancelClicked = true"
-                            (confirm)="onColickCompleteOrder(element)">
-                            <mat-icon style="color: green;">done</mat-icon>
-                            <span style="color: green;">Завершить заказ</span>
+                        <button mat-menu-item *ngIf="(element.status === 'завершен')"
+                            (click)="openCompliteDialog(element)">
+                            <mat-icon style="color: green;">
+                                done
+                            </mat-icon>
+                            <span style="color: green;">
+                                Завершить заказ
+                            </span>
                         </button>
                     </mat-menu>
                 </td>

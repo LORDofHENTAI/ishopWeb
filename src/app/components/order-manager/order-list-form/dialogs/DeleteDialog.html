@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Удалить заказ</h1>
+<div mat-dialog-content>
+    Вы действительно хотите удалить заказ
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button mat-dialog-close>НЕТ</button>
+    <button mat-raised-button mat-dialog-close cdkFocusInitial style="background: red; color: white;"
+        (click)="onDelete()">УДАЛИТЬ</button>
+</div>

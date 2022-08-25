@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, Inject } from '@angular/core';
 import { OrderListAnsw } from 'src/app/models/order-models/order-list-answ';
 import { OrderListReq } from 'src/app/models/order-models/order-list-req';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ import { timer } from 'rxjs';
 import { PauseOrderReq } from 'src/app/models/order-models/pause-order-req';
 import { OrderSearchService } from 'src/app/services/order-search/order-search.service';
 import { TimerService } from 'src/app/services/timer/timer.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmReturnProductComponent } from '../dialog-windows/confirm-return-product/confirm-return-product.component';
 import { environment } from 'src/environments/environment';
 import { FindOrderByAdReq } from 'src/app/models/order-models/find-order-by-ad-req';
@@ -391,7 +391,93 @@ export class OrderListFormComponent implements OnInit {
     });
   }
 
-  onColickCompleteOrder(element: OrderListAnsw) {
+  ngOnDestroy() {
+    this.data = '';
+  }
+
+  sub_order_id: any;
+  ShowDialogDataOrder(element) {
+    element.isActive = true;
+  }
+  HideDialogDataOrder(element) {
+    element.isActive = false;
+  }
+
+  openDeleteDialog(element: OrderListAnsw): void {
+    const deleteDialog = this.dialog.open(DeleteDialog, {
+      data: { action: this.action, styleNoConnect: this.styleNoConnect, searchValue: this.searchValue, element: element }
+    });
+    deleteDialog.afterClosed().subscribe(result => {
+      if (result = true) {
+        console.log(result);
+      }
+    });
+  }
+
+  openCompliteDialog(element: OrderListAnsw): void {
+    const compliteDialog = this.dialog.open(CompliteDialog, {
+      data: { action: this.action, element: element }
+    });
+    compliteDialog.afterClosed().subscribe(result => {
+      console.log(result)
+    });
+  }
+
+}
+
+
+@Component({
+  selector: 'DeleteDialog',
+  templateUrl: 'dialogs/DeleteDialog.html',
+})
+export class DeleteDialog {
+
+  constructor(
+    private snackbarService: SnakebarService,
+    private tokenService: TokenService,
+    private orderService: OrderService,
+    private orderList: OrderListFormComponent,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) { }
+  @Input() action: string = this.data.action;
+  @Input() searchValue = this.data.searchValue;
+  @Input() styleNoConnect = this.data.styleNoConnect;
+  @Input() messageNoConnect = this.data.messageNoConnect;
+
+  onDelete(element: OrderListAnsw = this.data.element) {
+    let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
+    this.orderService.orderDelete(pauseOrderReq).subscribe({
+      next: response => {
+        if (response.status === 'true') {
+          this.snackbarService.openSnackBar('Подзаказ удален', this.action,);
+          if (this.searchValue)
+            this.orderList.searchOrder(this.searchValue);
+          else this.orderList.loadData(null);
+          //   this.searchOrder(this.searchValue);
+          // else this.loadData(null);
+        }
+        else this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
+      },
+      error: error => {
+        console.log(error);
+        this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
+      }
+    });
+  }
+}
+
+@Component({
+  selector: 'CompliteDialog',
+  templateUrl: 'dialogs/CompliteDialog.html',
+})
+export class CompliteDialog {
+  constructor(
+    private snackbarService: SnakebarService,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { }
+
+  @Input() action: string = this.data.action
+  onColickCompleteOrder(element: OrderListAnsw = this.data.element) {
     // element.order.isSendToBitrix = true;
     // let t = timer(0, 1000).subscribe(vl => {
     //   console.log(vl);
@@ -413,17 +499,5 @@ export class OrderListFormComponent implements OnInit {
     // }
     // });
     this.snackbarService.openSnackBar('coming soon', this.action);
-  }
-
-  ngOnDestroy() {
-    this.data = '';
-  }
-
-  sub_order_id: any;
-  ShowDialogDataOrder(element) {
-    element.isActive = true;
-  }
-  HideDialogDataOrder(element) {
-    element.isActive = false;
   }
 }
