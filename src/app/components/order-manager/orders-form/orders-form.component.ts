@@ -117,6 +117,6 @@ export class OrdersFormComponent implements OnInit {
   }
 
   getAdminIshop(): boolean {
-    return environment.listAdminsIshop.includes(this.tokenService.getLogin());
+    return environment.listAdminsIshop.includes(this.tokenService.getLogin().toLowerCase());
   }
 }

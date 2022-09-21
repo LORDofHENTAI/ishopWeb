@@ -19,6 +19,7 @@ import { ConfirmReturnProductComponent } from '../dialog-windows/confirm-return-
 import { environment } from 'src/environments/environment';
 import { FindOrderByAdReq } from 'src/app/models/order-models/find-order-by-ad-req';
 import { element } from 'protractor';
+import { Status } from 'src/app/models/status';
 
 @Component({
   selector: 'app-order-list-form',
@@ -54,7 +55,8 @@ export class OrderListFormComponent implements OnInit {
     { path: '/orders/uncompleted', status: 'ns' },
     { path: '/orders/ready-shipment', status: 'rs' },
     { path: '/orders/canceled', status: 'os' },
-    { path: '/orders/archive', status: 'as' }
+    { path: '/orders/archive', status: 'as' },
+    { path: '/orders/completed', status: 'oc' }
   ];
 
   displayedColumns = ['check', 'status', 'name', 'client', 'collector', 'place', 'note', 'action', 'repeatStatus'];
@@ -296,7 +298,7 @@ export class OrderListFormComponent implements OnInit {
         let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
         this.orderService.orderReturn(pauseOrderReq).subscribe({
           next: response => {
-            switch (response.status) {
+            switch (response) {
               case 'auth error':
                 this.snackbarService.openSnackBar('Неверная идентификация.', this.action, this.styleNoConnect);
                 break;
@@ -334,7 +336,7 @@ export class OrderListFormComponent implements OnInit {
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), id);
     this.orderService.orderReturnToAssembly(pauseOrderReq).subscribe({
       next: response => {
-        if (response.status === 'true')
+        if (response === 'true')
           this.snackbarService.openSnackBar('Подзаказ возвращен в сборку', this.action,);
         else this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
       },
@@ -349,7 +351,7 @@ export class OrderListFormComponent implements OnInit {
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
     this.orderService.orderDelete(pauseOrderReq).subscribe({
       next: response => {
-        if (response.status === 'true') {
+        if (response === 'true') {
           this.snackbarService.openSnackBar('Подзаказ удален', this.action,);
           if (this.searchValue)
             this.searchOrder(this.searchValue);
@@ -365,7 +367,7 @@ export class OrderListFormComponent implements OnInit {
   }
 
   getAdminIshop(): boolean {
-    return environment.listAdminsIshop.includes(this.tokenService.getLogin());
+    return environment.listAdminsIshop.includes(this.tokenService.getLogin().toLowerCase());
   }
 
   onClickSendToBitrix(element: OrderListAnsw) {
@@ -380,8 +382,8 @@ export class OrderListFormComponent implements OnInit {
     let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
     this.orderService.orderSendToBitrix(findOrderReq).subscribe({
       next: response => {
-        if (response.status) {
-          this.snackbarService.openSnackBar(response.status, this.action);
+        if (response) {
+          this.snackbarService.openSnackBar('Отправлено в OMS', this.action);
         }
       },
       error: error => {
@@ -410,16 +412,29 @@ export class OrderListFormComponent implements OnInit {
     deleteDialog.afterClosed().subscribe(result => {
       if (result = true) {
         console.log(result);
+        this.loadData(null);
       }
     });
   }
 
-  openCompliteDialog(element: OrderListAnsw): void {
+  openCompliteDialog(element: OrderListAnsw, dialogType: number): void {
     const compliteDialog = this.dialog.open(CompliteDialog, {
-      data: { action: this.action, element: element }
+      data: { action: this.action, element: element, dialogType: dialogType }
     });
     compliteDialog.afterClosed().subscribe(result => {
-      console.log(result)
+      console.log(result);
+      if (result === 'OMS')
+        this.snackbarService.openSnackBar('Заказ отправлен в OMS', this.action);
+      if (result === 'Assembly')
+        this.snackbarService.openSnackBar('Заказ отправлен в сборку', this.action);
+      if (result === 'AssemblyError')
+        this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
+      if (result === 'Cassa')
+        this.snackbarService.openSnackBar('Заказ отправлен в кассу', this.action);
+      if (result === 'Complete')
+        this.snackbarService.openSnackBar('Заказ завершен', this.action);
+      if (result === false)
+        this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
     });
   }
 
@@ -438,6 +453,7 @@ export class DeleteDialog {
     private orderService: OrderService,
     private orderList: OrderListFormComponent,
     @Inject(MAT_DIALOG_DATA) public data: any,
+
   ) { }
   @Input() action: string = this.data.action;
   @Input() searchValue = this.data.searchValue;
@@ -448,13 +464,11 @@ export class DeleteDialog {
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
     this.orderService.orderDelete(pauseOrderReq).subscribe({
       next: response => {
-        if (response.status === 'true') {
+        if (response = 'true') {
           this.snackbarService.openSnackBar('Подзаказ удален', this.action,);
           if (this.searchValue)
             this.orderList.searchOrder(this.searchValue);
           else this.orderList.loadData(null);
-          //   this.searchOrder(this.searchValue);
-          // else this.loadData(null);
         }
         else this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
       },
@@ -473,10 +487,15 @@ export class DeleteDialog {
 export class CompliteDialog {
   constructor(
     private snackbarService: SnakebarService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private tokenService: TokenService,
+    private orderService: OrderService,
+    public dialogRef: MatDialogRef<OrderListFormComponent>
   ) { }
 
-  @Input() action: string = this.data.action
+  @Input() action: string = this.data.action;
+  @Input() dialogType: number = this.data.dialogType;
+
   onColickCompleteOrder(element: OrderListAnsw = this.data.element) {
     // element.order.isSendToBitrix = true;
     // let t = timer(0, 1000).subscribe(vl => {
@@ -490,14 +509,77 @@ export class CompliteDialog {
     // this.orderService.orderCompliteOrder(findOrderReq).subscribe({
     // next: response => {
     //   if(response.status){
-    //     this.snackbarService.openSnackBar(response.status, this.action);
+    //     this.dialogRef.close('Complete');
     //   }
     // },
     // error: error => {
     //   console.log(error);
-    //   this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
+    //   this.dialogRef.close(false);
     // }
     // });
-    this.snackbarService.openSnackBar('coming soon', this.action);
+    this.dialogRef.close('Complete');
   }
+
+  onClickSendToBitrix(element: OrderListAnsw = this.data.element) {
+    element.order.isSendToBitrix = true;
+    let t = timer(0, 1000).subscribe(vl => {
+      console.log(vl);
+      if (vl >= 20) {
+        element.order.isSendToBitrix = false;
+        t.unsubscribe();
+      }
+    });
+    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
+    this.orderService.orderSendToBitrix(findOrderReq).subscribe({
+      next: response => {
+        if (response) {
+          this.dialogRef.close('OMS');
+        }
+      },
+      error: error => {
+        console.log(error);
+        this.dialogRef.close(false);
+      }
+    });
+  }
+
+  onClickReturnToAssembly(id = this.data.element.sub_num) {
+    let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), id);
+    this.orderService.orderReturnToAssembly(pauseOrderReq).subscribe({
+      next: response => {
+        if (response === 'true')
+          this.dialogRef.close('Assembly');
+        else
+          this.dialogRef.close('AssemblyError');
+      },
+      error: error => {
+        console.log(error);
+        this.dialogRef.close(false);
+      }
+    });
+  }
+
+  onClickWriteToCashbox(element: OrderListAnsw = this.data.element) {
+    element.order.isCassaPause = true;
+    let t = timer(0, 1000).subscribe(vl => {
+      console.log(vl);
+      if (vl >= 20) {
+        element.order.isCassaPause = false;
+        t.unsubscribe();
+      }
+    });
+    let toCassa = new ToCassa(this.tokenService.getToken(), element.order.num, element.order.sub_num);
+    this.orderService.orderWriteToCashbox(toCassa).subscribe({
+      next: response => {
+        if (response.status === 'true') {
+          this.dialogRef.close('Cassa')
+        }
+      },
+      error: error => {
+        console.log(error);
+        this.dialogRef.close(false);
+      }
+    });
+  }
+
 }

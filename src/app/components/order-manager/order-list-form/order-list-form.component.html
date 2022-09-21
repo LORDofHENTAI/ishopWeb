@@ -40,7 +40,7 @@
                             <div class="return"> отправлен </div>
                         </ng-template>
                         <ng-template ngSwitchCase="Выполнен">
-                            <div class="return"> Выполнен</div>
+                            <div class="complete"> Выполнен</div>
                         </ng-template>
                         <div *ngIf="element.isActive === true" class="order-info-conteiner">
                             <app-show-data-order-form [sub_order_id]="element.order.sub_num"></app-show-data-order-form>
@@ -64,7 +64,7 @@
                             <ng-template ngSwitchCase="33"> Гродно </ng-template>
                             <ng-template ngSwitchCase="18">МОМО</ng-template>
                             <ng-template ngSwitchCase="24">Независимости</ng-template>
-                            <ng-template ngSwitchCase="32">Жуково</ng-template>
+                            <ng-template ngSwitchCase="32">Жукова</ng-template>
                             <ng-template ngSwitchCase="34">Экспобел</ng-template>
                             <ng-template ngSwitchDefault> Тайный склад №8 </ng-template>
                         </a>
@@ -131,31 +131,48 @@
                             <mat-icon>pageview</mat-icon>
                             <span>Просмотр</span>
                         </button>
-
-                        <button mat-menu-item (click)="onClickWriteToCashbox(element)"
+                        <!-- <button mat-menu-item (click)="onClickWriteToCashbox(element)"
+                            *ngIf="element.order.isCassa && element.status === 'завершен'"
+                            [disabled]="element.order.isCassaPause">
+                            <mat-icon style="color: rgba(65, 155, 38, 0.877);">move_to_inbox</mat-icon>
+                            <span style="color: rgba(65, 155, 38, 0.877);">Запись в кассу</span>
+                        </button> -->
+                        <button mat-menu-item (click)="openCompliteDialog(element, 4)"
                             *ngIf="element.order.isCassa && element.status === 'завершен'"
                             [disabled]="element.order.isCassaPause">
                             <mat-icon style="color: rgba(65, 155, 38, 0.877);">move_to_inbox</mat-icon>
                             <span style="color: rgba(65, 155, 38, 0.877);">Запись в кассу</span>
                         </button>
 
-                        <button mat-menu-item (click)="onClickReturnProduct(element)" *ngIf="(element.status === 'ОТЛОЖЕН'
+                        <!-- <button mat-menu-item (click)="onClickReturnProduct(element)" *ngIf="(element.status === 'ОТЛОЖЕН'
                             || element.status === 'Отмена'
                             || element.status === 'Отправлен'
                             || element.status === 'завершен')
                             && isAdminIshop">
                             <mat-icon style="color: rgb(21, 197, 188);">move_to_inbox</mat-icon>
                             <span style="color: rgb(21, 197, 188);">Возврат продукции</span>
-                        </button>
+                        </button> -->
 
-                        <button mat-menu-item *ngIf="(element.status === 'в паузе'
+                        <!-- <button mat-menu-item *ngIf="(element.status === 'в паузе'
                             || element.status === 'завершен')
                             && isAdminIshop" (click)="onClickReturnToAssembly(element.order.sub_num)">
                             <mat-icon style="color: blue;">keyboard_return</mat-icon>
                             <span style="color: blue;">Вернуть в сборку</span>
+                        </button> -->
+                        <button mat-menu-item *ngIf="(element.status === 'в паузе'
+                        || element.status === 'завершен')
+                        && isAdminIshop" (click)="openCompliteDialog(element, 3)">
+                            <mat-icon style="color: blue;">keyboard_return</mat-icon>
+                            <span style="color: blue;">Вернуть в сборку</span>
                         </button>
 
-                        <button mat-menu-item (click)="onClickSendToBitrix(element)"
+                        <!-- <button mat-menu-item (click)="onClickSendToBitrix(element)"
+                            *ngIf="(element.status === 'в паузе' || element.status === 'завершен') && isAdminIshop"
+                            [disabled]="element.order.isSendToBitrix">
+                            <mat-icon style="color: rgb(255, 166, 0);">send</mat-icon>
+                            <span style="color: rgb(255, 166, 0);">Оправить в OMS</span>
+                        </button> -->
+                        <button mat-menu-item (click)="openCompliteDialog(element, 2)"
                             *ngIf="(element.status === 'в паузе' || element.status === 'завершен') && isAdminIshop"
                             [disabled]="element.order.isSendToBitrix">
                             <mat-icon style="color: rgb(255, 166, 0);">send</mat-icon>
@@ -171,7 +188,7 @@
                             </span>
                         </button>
                         <button mat-menu-item *ngIf="(element.status === 'завершен')"
-                            (click)="openCompliteDialog(element)">
+                            (click)="openCompliteDialog(element, 1)">
                             <mat-icon style="color: green;">
                                 done
                             </mat-icon>

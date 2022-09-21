@@ -1,9 +1,51 @@
-<h1 mat-dialog-title>Завершить заказ</h1>
-<div mat-dialog-content class="mat-typography">
-    Вы действительно хотите завершить заказ
+<div *ngIf="dialogType === 1">
+    <h1 mat-dialog-title>Завершить заказ</h1>
+    <div mat-dialog-content class="mat-typography">
+        Вы действительно хотите завершить заказ
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button [mat-dialog-close]="null">НЕТ</button>
+        <button mat-raised-button style="background: green; color: white;"
+            (click)="onColickCompleteOrder()">Завершить</button>
+    </div>
 </div>
-<div mat-dialog-actions>
-    <button mat-raised-button mat-dialog-close>НЕТ</button>
-    <button mat-raised-button [mat-dialog-close]="true" cdkFocusInitial style="background: green; color: white;"
-        (click)="onColickCompleteOrder()">Завершить</button>
+
+
+<div *ngIf="dialogType === 2">
+    <h1 mat-dialog-title>Отправить в OMS</h1>
+    <div mat-dialog-content class="mat-typography">
+        Вы действительно хотите отправить заказ в OMS
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button [mat-dialog-close]="null">НЕТ</button>
+        <button mat-raised-button style="background: rgb(255, 166, 0); color: white;"
+            (click)="onClickSendToBitrix()">Отправить</button>
+    </div>
+</div>
+
+
+<div *ngIf="dialogType === 3">
+    <h1 mat-dialog-title>Вернуть в сборку</h1>
+    <div mat-dialog-content class="mat-typography">
+        Вы действительно хотите вернуть заказ в сборку
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button [mat-dialog-close]="null">НЕТ</button>
+        <button mat-raised-button style="background: blue; color: white;"
+            (click)="onClickReturnToAssembly()">Вернуть</button>
+    </div>
+</div>
+
+
+
+<div *ngIf="dialogType === 4">
+    <h1 mat-dialog-title>Записать в кассу</h1>
+    <div mat-dialog-content class="mat-typography">
+        Вы действительно хотите записать заказ в кассу
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button [mat-dialog-close]="null">НЕТ</button>
+        <button mat-raised-button style="background: rgba(65, 155, 38, 0.877); color: white;"
+            (click)="onClickWriteToCashbox()">Записать</button>
+    </div>
 </div>

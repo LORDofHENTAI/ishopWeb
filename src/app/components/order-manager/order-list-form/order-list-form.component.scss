@@ -64,6 +64,9 @@ mat-form-field {
 .ready-shipment {
     color: green;
 }
+.complete {
+    color: green;
+}
 .cancel {
     color: gray;
 }
@@ -204,6 +207,7 @@ mat-form-field {
     min-height: 10vh;
     border-radius: 20px;
     animation: ani 0.8s forwards;
+    border:1px solid
 }
 @keyframes ani {
     0% {opacity: 0;}

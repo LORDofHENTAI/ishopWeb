@@ -4,7 +4,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OrderBodyReq } from 'src/app/models/order-models/order-body-req';
 import { OrderBodyAnsw } from 'src/app/models/order-models/order-body-answ';
@@ -13,7 +13,7 @@ import { TokenService } from 'src/app/services/token/token.service';
 import { ClientInfo } from 'src/app/models/order-models/client-info';
 import { OrderBody } from 'src/app/models/order-models/order-body';
 import { Title } from '@angular/platform-browser';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BelPostAnsw } from 'src/app/models/order-models/bel-post-answ';
 import { BelPostReq } from 'src/app/models/order-models/bel-post-req';
 import { BarcodeInputCountFormComponent } from '../dialog-windows/barcode-input-count-form/barcode-input-count-form.component';
@@ -22,6 +22,8 @@ import { Changer } from 'src/app/models/order-models/changer';
 import { SnakebarService } from 'src/app/services/snakebar/snakebar.service';
 import { DelPostRequest } from 'src/app/models/order-models/del-post-request';
 import { element } from 'protractor';
+import { FindOrderReq } from 'src/app/models/order-models/find-order-req';
+import { OrderListAnsw } from 'src/app/models/order-models/order-list-answ';
 
 export interface BelpostData {
   barcode: string,
@@ -37,10 +39,10 @@ export interface BelpostData {
 })
 
 export class OrderComponent implements OnInit {
-
+  @Input() data: string;
   @ViewChild('barcodePrint', { static: true }) barcodePrint: any;
 
-  displayedColumns = ['article', 'barcode', 'name', 'count', 'countReady'];
+  displayedColumns = ['Артикул', ' ', 'Штрихкод', 'Наименование', 'Требуемое количество', 'Собранное количество'];
   displayedColumnsPrint = ['article', 'barcode', 'name', 'count', 'countReady', 'vatz', 'cost'];
   dataSource: Array<OrderBody> = [new OrderBody('', '', '', '', '0', '0', '0', false, '', '', '')];
   client: ClientInfo = new ClientInfo('', '', '');
@@ -54,10 +56,13 @@ export class OrderComponent implements OnInit {
   cancelClicked = false;
   confirmClicked = false;
   belpostData: BelpostData;
+  userName = '';
+  orderListAnsw: Array<OrderListAnsw> = [];
+
 
   orderBodyAnsw: OrderBodyAnsw = new OrderBodyAnsw('', '', '', false, '', new ClientInfo('', '', ''), [new OrderBody('', '', '', '', '0', '0', '0', false, '', '', '')], []);
   countReadyСhange: number;
-  belPostAnsw: BelPostAnsw | null;
+  belPostAnsw: BelPostAnsw = null;
   splitElement = ';';
 
   messageNoConnect = 'Нет соединения, попробуйте позже.';
@@ -137,6 +142,7 @@ export class OrderComponent implements OnInit {
       next: response => {
         if (response) {
           this.getData(response);
+
         }
       },
       error: error => {
@@ -144,6 +150,7 @@ export class OrderComponent implements OnInit {
       }
     });
     console.log();
+    this.userName = this.tokenService.getLogin();
   }
 
   selectBarcode(barcode: any) {
@@ -165,39 +172,22 @@ export class OrderComponent implements OnInit {
     this.belpostData = null;
   }
 
-  onDelete(barcode: any) {
-    this.selectedBarcodeFor = '';
-    this.belpostData = null;
-    let delPostRequest = new DelPostRequest(this.tokenService.getToken(), this.orderBodyAnsw.sub_num, barcode);
-    this.orderService.orderDeleteBelpostBarcode(delPostRequest).subscribe(response => {
-      if (response.status === 'true') {
-        this.snackbarService.openSnackBar('Штрихкод Белпочты удален', this.action,);
-        let orderBodyReq = new OrderBodyReq(this.tokenService.getToken(), this.orderId)
-        this.orderService.getSuborder(orderBodyReq).subscribe({
-          next: response => {
-            if (response) {
-              this.getData(response);
-            }
-          },
-          error: error => {
-            console.log(error);
-          }
-        });
-      }
-      else this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
-    },
-      error => {
-        console.log(error);
-        this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
-      });
-  }
-
+  orderStatus: string;
   getData(response: OrderBodyAnsw) {
     this.orderBodyAnsw = response;
     this.fruits = response.place;
     this.client = this.orderBodyAnsw.aboutClient;
     this.dataSource = this.orderBodyAnsw.body;
     this.getBelpostBarcodes(this.orderBodyAnsw.postCode);
+    this.orderService.orderSearch(new FindOrderReq(this.tokenService.getToken(), this.orderBodyAnsw.num, this.orderBodyAnsw.name)).subscribe({
+      next: response => {
+        if (response)
+          this.orderStatus = response[0].status;
+      },
+      error: error => {
+        console.log(error);
+      }
+    });
     console.log(this.orderBodyAnsw);
   }
 
@@ -254,11 +244,12 @@ export class OrderComponent implements OnInit {
 
     this.orderService.orderSaveChange(order).subscribe({
       next: response => {
-        if (response.status === 'Complate') {
+        if (response === 'Complate') {
           this.snackbarService.openSnackBar('Количество изменено', this.action);
-
+          console.log('пришло');
+          this.getData(this.orderBodyAnsw);
         }
-        if (response.status === 'fail') {
+        if (response === 'fail') {
           this.snackbarService.openSnackBar('Перезагрузите страницу', this.action);
         }
       },
@@ -331,5 +322,116 @@ export class OrderComponent implements OnInit {
 
   endOrder() {
     this.snackbarService.openSnackBar('coming soon', this.action);
+  }
+
+  openDeleteDialog(barcode: any, sub_num: any): void {
+    const deleteDialog = this.dialog.open(BelpostDelete, {
+      data: { barcode: barcode, sub_num: sub_num }
+    });
+    deleteDialog.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.snackbarService.openSnackBar('Штрихкод Белпочты удален', this.action);
+      }
+      else
+        if (result === false) {
+          this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
+        }
+
+    });
+  }
+
+  openCompliteDialog(): void {
+    const compliteDialog = this.dialog.open(orderCompleteDialog, {
+    });
+    compliteDialog.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result === 'Complete')
+        this.snackbarService.openSnackBar('Заказ завершен', this.action);
+    });
+  }
+}
+
+
+
+@Component({
+  selector: 'belpost-delete-dialog.html',
+  templateUrl: 'order-dialog/belpost-delete-dialog.html',
+})
+
+export class BelpostDelete {
+
+  constructor(
+    private tokenService: TokenService,
+    private orderService: OrderService,
+    private orderComponent: OrderComponent,
+    public dialogRef: MatDialogRef<OrderComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {
+
+  }
+  @Input() barcode: string = this.data.barcode;
+  @Input() sub_num: string = this.data.sub_num;
+  belpostData: BelpostData;
+  belPostAnsw: BelPostAnsw = null;
+  action = 'Ok';
+  selectedBarcodeFor = '';
+  orderId = '';
+
+  onDelete() {
+    this.selectedBarcodeFor = '';
+    this.belpostData = null;
+    let delPostRequest = new DelPostRequest(this.tokenService.getToken(), this.sub_num, this.barcode);
+    this.orderService.orderDeleteBelpostBarcode(delPostRequest).subscribe({
+      next: response => {
+        console.log(response);
+        if (response = 'true') {
+          this.dialogRef.close(true);
+        }
+
+      },
+      error: error => {
+        console.log(error);
+        this.dialogRef.close(false);
+      }
+    });
+  }
+
+}
+
+@Component({
+  selector: 'order-complete-dialog',
+  templateUrl: 'order-dialog/order-complete-dialog.html',
+})
+
+export class orderCompleteDialog {
+
+  constructor(
+    private dialogRef: MatDialogRef<OrderComponent>,
+  ) {
+
+  }
+  onColickCompleteOrder() {
+
+    // element.order.isSendToBitrix = true;
+    // let t = timer(0, 1000).subscribe(vl => {
+    //   console.log(vl);
+    //   if(vl>=20){
+    //     element.order.isSendToBitrix = false;
+    //     t.unsubscribe();
+    //   }
+    // });
+    // let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
+    // this.orderService.orderCompliteOrder(findOrderReq).subscribe({
+    // next: response => {
+    //   if(response.status){
+    //     this.dialogRef.close('Complete');
+    //   }
+    // },
+    // error: error => {
+    //   console.log(error);
+    //   this.dialogRef.close(false);
+    // }
+    // });
+    this.dialogRef.close('Complete');
   }
 }

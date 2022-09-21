@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Удалить штрихкод</h1>
+<div mat-dialog-content>
+    Вы действительно хотите удалить штрихкод
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button [mat-dialog-close]="null">НЕТ</button>
+    <button mat-raised-button cdkFocusInitial style="background: red; color: white;" (click)="onDelete()">
+        УДАЛИТЬ
+    </button>
+</div>

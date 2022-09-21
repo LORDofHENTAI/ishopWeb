@@ -25,6 +25,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatGridListModule } from '@angular/material/grid-list';
 // -----------------------------------------------------------------------------------------
 import { CompliteDialog } from './components/order-manager/order-list-form/order-list-form.component';
 import { DeleteDialog } from './components/order-manager/order-list-form/order-list-form.component';
@@ -54,6 +55,9 @@ import { OrdersReadyShipmentComponent } from './components/order-manager/order-t
 import { OrdersUncompletedComponent } from './components/order-manager/order-types/orders-uncompleted/orders-uncompleted.component';
 import { EmptyFormComponent } from './components/empty-form/empty-form.component';
 import { ShowDataOrderFormComponent } from './components/order-manager/order-list-form/show-data-order-form/show-data-order-form.component';
+import { BelpostDelete } from './components/order-manager/order/order.component';
+import { OrderCompletedComponent } from './components/order-manager/order-types/order-completed/order-completed.component';
+import { orderCompleteDialog } from './components/order-manager/order/order.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +85,10 @@ import { ShowDataOrderFormComponent } from './components/order-manager/order-lis
     EmptyFormComponent,
     ShowDataOrderFormComponent,
     CompliteDialog,
-    DeleteDialog
+    DeleteDialog,
+    BelpostDelete,
+    OrderCompletedComponent,
+    orderCompleteDialog
   ],
   imports: [
     BrowserModule,
@@ -112,9 +119,9 @@ import { ShowDataOrderFormComponent } from './components/order-manager/order-lis
     MatSlideToggleModule,
     MatCheckboxModule,
     SmoothScrollModule,
-
+    MatGridListModule,
   ],
-  providers: [HttpClient, Title, CookieService, OrderListFormComponent],
+  providers: [HttpClient, Title, CookieService, OrderListFormComponent, OrderComponent],
   entryComponents: [
     BarcodeInputCountFormComponent,
     ConfirmReturnProductComponent,

@@ -1,9 +1,36 @@
-.table-container {
+.table-container {  
+    margin-top: 10px;
     // height: 400px;
+    box-shadow: 0px -1px 16px 0px #623eb693;
     overflow: auto;
 }
 table {
+    text-align: start;
     width: 100%;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    
+    tr:first-child{
+        
+        background: #6440b6;
+        color: #fff;
+        height: 50px;
+    }
+    .custom{
+        background: rgb(255, 127, 223)!important;
+    }
+    .customV{
+        background: #212d3b!important;
+    }
+    th{
+        text-align: start;
+        padding: 0 20px;
+        font-weight: 300;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
+    td{
+        padding: 0 20px;
+    }
 }
 .mat-list-item {
     height: 1.2em !important;
@@ -49,13 +76,17 @@ img {
     margin: 0;
 }
 .list-img-box {
+    display: flex;
     margin: 0.25rem;
 }
 .img-box {
+    position: relative;
     margin: 0.25rem;
     padding: 0.2rem;
     border: 2px solid transparent;
     border-radius: 10px;
+    width: 180px;
+    height: 55px;
 }
 // .img-box:hover {
 //     border: 2px solid rgba(146, 146, 146, 0.75);
@@ -76,10 +107,16 @@ img {
     right: -13px;
 }
 button#bt-delete {
+    height: 5px;
+    width: 10px;
     color: rgba(146, 146, 146, 0.75);
+    z-index:10;
+    position:absolute;
+    top: -8px;
+    right: 10px;
 }
 button#bt-delete:hover {
-    color: rgba(176, 89, 202, 0.75);;
+    color: #6440b6;
 }
 .example-chip-list {
   width: 100%;

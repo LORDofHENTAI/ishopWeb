@@ -3,7 +3,7 @@ import { OrderBodyAnsw } from 'src/app/models/order-models/order-body-answ';
 import { OrderBodyReq } from 'src/app/models/order-models/order-body-req';
 import { TokenService } from 'src/app/services/token/token.service';
 import { OrderService } from 'src/app/services/order-service/order.service';
-
+import { OrderBody } from 'src/app/models/order-models/order-body';
 @Component({
   selector: 'app-show-data-order-form',
   templateUrl: './show-data-order-form.component.html',
@@ -12,7 +12,7 @@ import { OrderService } from 'src/app/services/order-service/order.service';
 export class ShowDataOrderFormComponent implements OnInit {
 
   @Input() sub_order_id: string;
-  orderBodyAnsw: OrderBodyAnsw;
+  orderBodyAnsw?: OrderBody[];
   constructor(
     private tokenService: TokenService,
     private orderService: OrderService
@@ -36,7 +36,7 @@ export class ShowDataOrderFormComponent implements OnInit {
   }
 
   getData(response: OrderBodyAnsw) {
-    this.orderBodyAnsw = response;
+    this.orderBodyAnsw = response.body;
     console.log(this.orderBodyAnsw);
   }
 }
