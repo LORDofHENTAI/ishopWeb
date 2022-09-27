@@ -1,5 +1,5 @@
-<div class='navbar' [ngClass]="userName == 'orlova_v' ? 'custom' : 'standart'"
-    [ngClass]="userName == 'maksimovich_v' ? 'customV' : 'standart'">
+<div class='navbar'
+    [ngClass]="userName == 'orlova_v' ? 'custom' : (userName == 'maksimovich_v' ? 'customV' : 'standart')">
     <div class="navbar-logo">
         <a href="#">IShop Mile</a>
     </div>

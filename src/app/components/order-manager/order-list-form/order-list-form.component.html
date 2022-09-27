@@ -33,14 +33,17 @@
                         <ng-template ngSwitchCase="завершен">
                             <div class="ready-shipment"> готов к отгрузке </div>
                         </ng-template>
-                        <ng-template ngSwitchCase="Отмена">
-                            <div class="cancel"> отмена </div>
+                        <ng-template ngSwitchCase="Заблокирован">
+                            <div class="cancel"> Отменен </div>
                         </ng-template>
                         <ng-template ngSwitchCase="Отправлен">
                             <div class="return"> отправлен </div>
                         </ng-template>
                         <ng-template ngSwitchCase="Выполнен">
                             <div class="complete"> Выполнен</div>
+                        </ng-template>
+                        <ng-template ngSwitchCase="Отмена">
+                            <div class="return-to-retail"> Вернуть в секцию</div>
                         </ng-template>
                         <div *ngIf="element.isActive === true" class="order-info-conteiner">
                             <app-show-data-order-form [sub_order_id]="element.order.sub_num"></app-show-data-order-form>
@@ -178,7 +181,15 @@
                             <mat-icon style="color: rgb(255, 166, 0);">send</mat-icon>
                             <span style="color: rgb(255, 166, 0);">Оправить в OMS</span>
                         </button>
-
+                        <button mat-menu-item *ngIf="(element.status === 'Отмена')"
+                            (click)="openCompliteDialog(element, 5)">
+                            <mat-icon style="color: green;">
+                                assignment_return
+                            </mat-icon>
+                            <span style="color: green;">
+                                Вернуть в секцию
+                            </span>
+                        </button>
                         <button mat-menu-item *ngIf="isAdminIshop" (click)="openDeleteDialog(element)">
                             <mat-icon style="color: red;">
                                 delete_forever

@@ -241,6 +241,8 @@ export class OrderComponent implements OnInit {
     this.orderBodyAnsw.place = this.fruits;
 
     let order = new Changer(this.tokenService.getToken(), this.orderBodyAnsw);
+    //! if (this.belpostBarcodes.length > 0 ?? this.orderBodyAnsw.belPost) {
+
 
     this.orderService.orderSaveChange(order).subscribe({
       next: response => {
@@ -258,6 +260,9 @@ export class OrderComponent implements OnInit {
         this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
       }
     });
+    //! }
+    //! else
+    //!   this.snackbarService.openSnackBar('КУДА ТЫ ЛЕЗЕШЬ, ПЫЛЕСОСИНА', this.action, this.styleNoConnect);
   }
 
   checkDataChanged(): boolean {

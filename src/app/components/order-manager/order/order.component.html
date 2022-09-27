@@ -62,8 +62,7 @@
 
 <div class="table-container">
     <table>
-        <tr [ngClass]="userName == 'orlova_v' ? 'custom' : 'standart'"
-            [ngClass]="userName == 'maksimovich_v' ? 'customV' : 'standart'">
+        <tr [ngClass]="userName == 'orlova_v' ? 'custom' : (userName == 'maksimovich_v' ? 'customV' : 'standart')">
             <th *ngFor="let header of displayedColumns">
                 {{header}}
             </th>

@@ -36,6 +36,7 @@ export class OrderService {
   urlSaveChange = this.urlOrder + '/change/';
   urlDelpost = this.urlOrder + '/delpost/';
   urlEndOrder = this.urlOrder + '/endOrder/';
+  urlReturnToRetail = this.urlOrder + '/returnToRetail/';
 
   constructor(private http: HttpClient) { }
 
@@ -103,4 +104,7 @@ export class OrderService {
     return this.http.post<string>(`${this.urlEndOrder}`, data);
   }
 
+  orderReturnToRetail(data: PauseOrderReq): Observable<string> {
+    return this.http.post<string>(`${this.urlReturnToRetail}`, data);
+  }
 }

@@ -49,3 +49,15 @@
             (click)="onClickWriteToCashbox()">Записать</button>
     </div>
 </div>
+
+<div *ngIf="dialogType === 5">
+    <h1 mat-dialog-title>Заказ возвращен в секицию</h1>
+    <div mat-dialog-content class="mat-typography">
+        Вы действительно вернули заказ в секцию
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button [mat-dialog-close]="null">НЕТ</button>
+        <button mat-raised-button style="background: green; color: white;"
+            (click)="onClickReturnToRetail()">Возвращен</button>
+    </div>
+</div>

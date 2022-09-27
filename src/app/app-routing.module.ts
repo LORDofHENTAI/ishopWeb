@@ -10,6 +10,7 @@ import { OrdersReadyShipmentComponent } from './components/order-manager/order-t
 import { OrderCanceledComponent } from './components/order-manager/order-types/order-canceled/order-canceled.component';
 import { EmptyFormComponent } from './components/empty-form/empty-form.component';
 import { OrderCompletedComponent } from './components/order-manager/order-types/order-completed/order-completed.component';
+import { OrderReturnToRetailComponent } from './components/order-manager/order-types/order-return-to-retail/order-return-to-retail.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/orders/ready-build', pathMatch: 'full' },
@@ -18,12 +19,13 @@ const routes: Routes = [
   { path: 'orders/ready-build', component: OrdersReadyBuildComponent },
   // { path: 'orders/in-assembly', component: OrdersReadyBuildComponent },
   { path: 'orders/uncompleted', component: OrdersUncompletedComponent },
-
   { path: 'orders/ready-shipment', component: OrdersReadyShipmentComponent },
+  { path: 'orders/return-to-retail', component: OrderReturnToRetailComponent },
   { path: 'orders/canceled', component: OrderCanceledComponent },
   { path: 'orders/archive', component: OrdersArchiveComponent },
   { path: 'orders', component: OrdersFormComponent },
   { path: 'orders/completed', component: OrderCompletedComponent },
+
   { path: 'empty', component: EmptyFormComponent }
 ];
 

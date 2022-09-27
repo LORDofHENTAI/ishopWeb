@@ -20,14 +20,17 @@
                     <ng-template ngSwitchCase="завершен">
                         <div class="ready-shipment"> готов к отгрузке </div>
                     </ng-template>
-                    <ng-template ngSwitchCase="Отмена">
-                        <div class="cancel"> отмена </div>
+                    <ng-template ngSwitchCase="Заблокирован">
+                        <div class="cancel"> Отменен </div>
                     </ng-template>
                     <ng-template ngSwitchCase="Отправлен">
                         <div class="chartreuse"> отправлен </div>
                     </ng-template>
                     <ng-template ngSwitchCase="Выполнен">
                         <div class="complete"> Выполнен </div>
+                    </ng-template>
+                    <ng-template ngSwitchCase="Отмена">
+                        <div class="complete">Вернуть в секцию</div>
                     </ng-template>
                 </div>
             </td>

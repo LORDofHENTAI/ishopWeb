@@ -54,7 +54,8 @@ export class OrderListFormComponent implements OnInit {
     { path: '/orders/ready-build', status: 'gs' },
     { path: '/orders/uncompleted', status: 'ns' },
     { path: '/orders/ready-shipment', status: 'rs' },
-    { path: '/orders/canceled', status: 'os' },
+    { path: '/orders/canceled', status: 'ob' },
+    { path: '/orders/return-to-retail', status: 'os' },
     { path: '/orders/archive', status: 'as' },
     { path: '/orders/completed', status: 'oc' }
   ];
@@ -433,6 +434,8 @@ export class OrderListFormComponent implements OnInit {
         this.snackbarService.openSnackBar('Заказ отправлен в кассу', this.action);
       if (result === 'Complete')
         this.snackbarService.openSnackBar('Заказ завершен', this.action);
+      if (result === 'returnToRetail')
+        this.snackbarService.openSnackBar('Заказ возвращен в секцию', this.action);
       if (result === false)
         this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
     });
@@ -581,5 +584,22 @@ export class CompliteDialog {
       }
     });
   }
+
+  onClickReturnToRetail(element: OrderListAnsw = this.data.element) {
+    let returnToRetailOrder = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
+    this.orderService.orderReturnToRetail(returnToRetailOrder).subscribe({
+      next: response => {
+        console.log(response);
+        if (response = 'true') {
+          this.dialogRef.close('returnToRetail');
+        }
+      },
+      error: error => {
+        console.log(error);
+        this.dialogRef.close(false);
+      }
+    });
+  }
+
 
 }
