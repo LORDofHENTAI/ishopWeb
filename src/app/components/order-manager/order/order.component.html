@@ -72,7 +72,8 @@
                 {{i.article}}
             </td>
             <td>
-                <img src="{{i.foto}}" style="width: 100px; height: 100px">
+                <img src="{{i.foto}}" *ngIf="i.foto" onerror="this.src='../../../../assets/no_photo.png'"
+                    style="width: 100px; height: 100px">
             </td>
             <td>
                 <mat-list>

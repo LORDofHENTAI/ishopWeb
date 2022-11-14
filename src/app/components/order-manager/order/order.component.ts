@@ -97,6 +97,7 @@ export class OrderComponent implements OnInit {
     );
   }
 
+
   /* */
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
@@ -149,7 +150,6 @@ export class OrderComponent implements OnInit {
         console.log(error);
       }
     });
-    console.log();
     this.userName = this.tokenService.getLogin();
   }
 
@@ -240,29 +240,27 @@ export class OrderComponent implements OnInit {
 
     this.orderBodyAnsw.place = this.fruits;
 
-    let order = new Changer(this.tokenService.getToken(), this.orderBodyAnsw);
-    //! if (this.belpostBarcodes.length > 0 ?? this.orderBodyAnsw.belPost) {
 
-
-    this.orderService.orderSaveChange(order).subscribe({
-      next: response => {
-        if (response === 'Complate') {
-          this.snackbarService.openSnackBar('Количество изменено', this.action);
-          console.log('пришло');
-          this.getData(this.orderBodyAnsw);
+    if (!this.orderBodyAnsw.belPost || (this.orderBodyAnsw.belPost && this.belpostBarcodes.length > 0)) {
+      let order = new Changer(this.tokenService.getToken(), this.orderBodyAnsw);
+      this.orderService.orderSaveChange(order).subscribe({
+        next: response => {
+          if (response === 'true') {
+            this.snackbarService.openSnackBar('Количество изменено', this.action);
+            this.getData(this.orderBodyAnsw);
+          }
+          if (response === 'false') {
+            this.snackbarService.openSnackBar('Перезагрузите страницу', this.action);
+          }
+        },
+        error: error => {
+          console.log(error);
+          this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
         }
-        if (response === 'fail') {
-          this.snackbarService.openSnackBar('Перезагрузите страницу', this.action);
-        }
-      },
-      error: error => {
-        console.log(error);
-        this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
-      }
-    });
-    //! }
-    //! else
-    //!   this.snackbarService.openSnackBar('КУДА ТЫ ЛЕЗЕШЬ, ПЫЛЕСОСИНА', this.action, this.styleNoConnect);
+      });
+    }
+    else
+      this.snackbarService.openSnackBar('Добавьте штрихкод', this.action, this.styleNoConnect);
   }
 
   checkDataChanged(): boolean {
@@ -284,14 +282,14 @@ export class OrderComponent implements OnInit {
             if (response) {
               this.belPostAnsw = response;
               let t = timer(0, 100).subscribe(vl => {
-                console.log(vl);
                 if (vl >= 10) {
-                  this.barcodePrint._elementRef.nativeElement.click();
+                  // this.barcodePrint._elementRef.nativeElement.click();
                   t.unsubscribe();
                   let orderBodyReq = new OrderBodyReq(this.tokenService.getToken(), this.orderId)
                   this.orderService.getSuborder(orderBodyReq).subscribe({
                     next: response => {
                       if (response) {
+                        console.log('barcode added')
                         this.getData(response);
                       }
                     },
@@ -336,6 +334,17 @@ export class OrderComponent implements OnInit {
     deleteDialog.afterClosed().subscribe(result => {
       if (result === true) {
         this.snackbarService.openSnackBar('Штрихкод Белпочты удален', this.action);
+        let orderBodyReq = new OrderBodyReq(this.tokenService.getToken(), this.orderId)
+        this.orderService.getSuborder(orderBodyReq).subscribe({
+          next: response => {
+            if (response) {
+              this.getData(response);
+            }
+          },
+          error: error => {
+            console.log(error);
+          }
+        });
       }
       else
         if (result === false) {

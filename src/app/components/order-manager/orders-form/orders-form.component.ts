@@ -40,6 +40,7 @@ export class OrdersFormComponent implements OnInit {
     private orderSearchService: OrderSearchService,) { }
 
   ngOnInit(): void {
+    console.log(this.tokenService.getToken())
     this.titleService.setTitle('IShop Mile');
     this.isAdminIshop = this.getAdminIshop();
     this.intervalId = setInterval(() => {

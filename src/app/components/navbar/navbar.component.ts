@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/token/token.service';
 import { environment } from 'src/environments/environment';
-
+import { MatDialog } from '@angular/material/dialog';
+import { UnloadingComponent } from './unloading-dialog/unloading/unloading.component';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -12,9 +13,11 @@ export class NavbarComponent implements OnInit {
 
   isLoginUser = false;
   userName = '';
+  isAdminIshop = false;
   constructor(
     private router: Router,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private dialog: MatDialog
   ) {
     this.tokenService.events$.forEach(value => { this.eventLogin(value) });
   }
@@ -23,6 +26,8 @@ export class NavbarComponent implements OnInit {
     if (this.tokenService.isLoginUser()) {
       this.isLoginUser = true;
       this.userName = this.tokenService.getLogin();
+      this.isAdminIshop = this.getAdminIshop();
+      console.log('>>>' + this.isAdminIshop)
       // this.router.navigate(['/orders']);
     }
     else {
@@ -30,7 +35,9 @@ export class NavbarComponent implements OnInit {
       this.router.navigate(['/login']);
     }
   }
-
+  getAdminIshop(): boolean {
+    return environment.listAdminsIshop.includes(this.tokenService.getLogin().toLowerCase());
+  }
   eventLogin(event: boolean) {
     if (event === true)
       this.isLoginUser = event;
@@ -44,6 +51,14 @@ export class NavbarComponent implements OnInit {
     this.tokenService.deleteCookie();
     this.isLoginUser = false;
     this.router.navigate(['/login']);
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(UnloadingComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
 }

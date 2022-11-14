@@ -27,6 +27,7 @@
         </button>
         <mat-menu #menu="matMenu">
             <a mat-menu-item>{{userName}}</a>
+            <a mat-menu-item (click)="openDialog()" *ngIf="isAdminIshop">Выгрузка</a>
             <a mat-menu-item (click)="onClickLogout()">Выйти</a>
         </mat-menu>
     </div>

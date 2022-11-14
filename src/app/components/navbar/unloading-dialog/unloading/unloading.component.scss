@@ -1,0 +1,19 @@
+mat-dialog-content{
+    min-height: 125px!important;
+    min-width: 280px!important;
+}
+.content-conteiner{
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    div{
+        margin-right: 15px;
+        width: 50%;
+    }
+}
+.main-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

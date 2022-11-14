@@ -59,6 +59,7 @@ import { BelpostDelete } from './components/order-manager/order/order.component'
 import { OrderCompletedComponent } from './components/order-manager/order-types/order-completed/order-completed.component';
 import { orderCompleteDialog } from './components/order-manager/order/order.component';
 import { OrderReturnToRetailComponent } from './components/order-manager/order-types/order-return-to-retail/order-return-to-retail.component';
+import { UnloadingComponent } from './components/navbar/unloading-dialog/unloading/unloading.component';
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { OrderReturnToRetailComponent } from './components/order-manager/order-t
     BelpostDelete,
     OrderCompletedComponent,
     orderCompleteDialog,
-    OrderReturnToRetailComponent
+    OrderReturnToRetailComponent,
+    UnloadingComponent
   ],
   imports: [
     BrowserModule,
