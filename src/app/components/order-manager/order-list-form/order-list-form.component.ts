@@ -500,38 +500,21 @@ export class CompliteDialog {
   @Input() dialogType: number = this.data.dialogType;
 
   onColickCompleteOrder(element: OrderListAnsw = this.data.element) {
-    // element.order.isSendToBitrix = true;
-    // let t = timer(0, 1000).subscribe(vl => {
-    //   console.log(vl);
-    //   if(vl>=20){
-    //     element.order.isSendToBitrix = false;
-    //     t.unsubscribe();
-    //   }
-    // });
-    // let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
-    // this.orderService.orderCompliteOrder(findOrderReq).subscribe({
-    // next: response => {
-    //   if(response.status){
-    //     this.dialogRef.close('Complete');
-    //   }
-    // },
-    // error: error => {
-    //   console.log(error);
-    //   this.dialogRef.close(false);
-    // }
-    // });
-    this.dialogRef.close('Complete');
+    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
+    this.orderService.orderCompliteOrder(findOrderReq).subscribe({
+      next: response => {
+        if (response) {
+          this.dialogRef.close('Complete');
+        }
+      },
+      error: error => {
+        console.log(error);
+        this.dialogRef.close(false);
+      }
+    });
   }
 
   onClickSendToBitrix(element: OrderListAnsw = this.data.element) {
-    element.order.isSendToBitrix = true;
-    let t = timer(0, 1000).subscribe(vl => {
-      console.log(vl);
-      if (vl >= 20) {
-        element.order.isSendToBitrix = false;
-        t.unsubscribe();
-      }
-    });
     let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
     this.orderService.orderSendToBitrix(findOrderReq).subscribe({
       next: response => {
@@ -563,14 +546,6 @@ export class CompliteDialog {
   }
 
   onClickWriteToCashbox(element: OrderListAnsw = this.data.element) {
-    element.order.isCassaPause = true;
-    let t = timer(0, 1000).subscribe(vl => {
-      console.log(vl);
-      if (vl >= 20) {
-        element.order.isCassaPause = false;
-        t.unsubscribe();
-      }
-    });
     let toCassa = new ToCassa(this.tokenService.getToken(), element.order.num, element.order.sub_num);
     this.orderService.orderWriteToCashbox(toCassa).subscribe({
       next: response => {

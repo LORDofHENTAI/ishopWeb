@@ -60,6 +60,7 @@ import { OrderCompletedComponent } from './components/order-manager/order-types/
 import { orderCompleteDialog } from './components/order-manager/order/order.component';
 import { OrderReturnToRetailComponent } from './components/order-manager/order-types/order-return-to-retail/order-return-to-retail.component';
 import { UnloadingComponent } from './components/navbar/unloading-dialog/unloading/unloading.component';
+import { GroupToArticleComponent } from './components/navbar/group-to-article/group-to-article.component';
 
 @NgModule({
   declarations: [
@@ -92,7 +93,8 @@ import { UnloadingComponent } from './components/navbar/unloading-dialog/unloadi
     OrderCompletedComponent,
     orderCompleteDialog,
     OrderReturnToRetailComponent,
-    UnloadingComponent
+    UnloadingComponent,
+    GroupToArticleComponent
   ],
   imports: [
     BrowserModule,

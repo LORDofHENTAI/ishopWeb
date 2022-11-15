@@ -356,6 +356,7 @@ export class OrderComponent implements OnInit {
 
   openCompliteDialog(): void {
     const compliteDialog = this.dialog.open(orderCompleteDialog, {
+      data: { orderBodyAnsw: this.orderBodyAnsw }
     });
     compliteDialog.afterClosed().subscribe(result => {
       console.log(result);
@@ -421,31 +422,24 @@ export class orderCompleteDialog {
 
   constructor(
     private dialogRef: MatDialogRef<OrderComponent>,
+    private orderService: OrderService,
+    private tokenService: TokenService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
 
   }
   onColickCompleteOrder() {
-
-    // element.order.isSendToBitrix = true;
-    // let t = timer(0, 1000).subscribe(vl => {
-    //   console.log(vl);
-    //   if(vl>=20){
-    //     element.order.isSendToBitrix = false;
-    //     t.unsubscribe();
-    //   }
-    // });
-    // let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
-    // this.orderService.orderCompliteOrder(findOrderReq).subscribe({
-    // next: response => {
-    //   if(response.status){
-    //     this.dialogRef.close('Complete');
-    //   }
-    // },
-    // error: error => {
-    //   console.log(error);
-    //   this.dialogRef.close(false);
-    // }
-    // });
-    this.dialogRef.close('Complete');
+    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), this.data.num, '');
+    this.orderService.orderCompliteOrder(findOrderReq).subscribe({
+      next: response => {
+        if (response) {
+          this.dialogRef.close('Complete');
+        }
+      },
+      error: error => {
+        console.log(error);
+        this.dialogRef.close(false);
+      }
+    });
   }
 }

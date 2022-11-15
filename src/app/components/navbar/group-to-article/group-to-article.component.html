@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Получение артикулов из групп</h2>
+<mat-dialog-content class="mat-typography">
+    <div class="main-container">
+        <div class="input__wrapper">
+            <input name="file" type="file" name="file" id="input__file" class="input input__file"
+                (change)="selectFile($event)"
+                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+            <label for="input__file" class="input__file-button">
+                <span class="input__file-icon-wrapper">
+                    <span class="material-icons">
+                        file_download
+                    </span>
+                </span>
+                <span class="input__file-button-text">{{selectedFileName}}</span>
+            </label>
+        </div>
+    </div>
+    <button mat-button (click)="upload()">Отправить</button>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Закрыть</button>
+</mat-dialog-actions>
