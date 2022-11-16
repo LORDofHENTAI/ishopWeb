@@ -533,7 +533,7 @@ export class CompliteDialog {
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), id);
     this.orderService.orderReturnToAssembly(pauseOrderReq).subscribe({
       next: response => {
-        if (response === 'true')
+        if (response = 'true')
           this.dialogRef.close('Assembly');
         else
           this.dialogRef.close('AssemblyError');
@@ -546,10 +546,12 @@ export class CompliteDialog {
   }
 
   onClickWriteToCashbox(element: OrderListAnsw = this.data.element) {
+
     let toCassa = new ToCassa(this.tokenService.getToken(), element.order.num, element.order.sub_num);
     this.orderService.orderWriteToCashbox(toCassa).subscribe({
       next: response => {
-        if (response.status === 'true') {
+        console.log(response)
+        if (response = 'true') {
           this.dialogRef.close('Cassa')
         }
       },

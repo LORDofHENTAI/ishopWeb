@@ -245,11 +245,11 @@ export class OrderComponent implements OnInit {
       let order = new Changer(this.tokenService.getToken(), this.orderBodyAnsw);
       this.orderService.orderSaveChange(order).subscribe({
         next: response => {
-          if (response === 'true') {
+          if (response = 'true') {
             this.snackbarService.openSnackBar('Количество изменено', this.action);
             this.getData(this.orderBodyAnsw);
           }
-          if (response === 'false') {
+          if (response = 'false') {
             this.snackbarService.openSnackBar('Перезагрузите страницу', this.action);
           }
         },

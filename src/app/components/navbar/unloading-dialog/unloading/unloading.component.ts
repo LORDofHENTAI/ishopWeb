@@ -17,7 +17,28 @@ export class UnloadingComponent implements OnInit {
   fullLoad() {
     this.fullLoadService.fullIshopLoad(new FullLoad(this.tokenService.getToken())).subscribe({
       next: response => {
-
+        console.log(response)
+      },
+      error: error => {
+        console.log(error)
+      }
+    })
+  }
+  fullLoadPrice() {
+    console.log('asd')
+    this.fullLoadService.priceLoad(new FullLoad(this.tokenService.getToken())).subscribe({
+      next: response => {
+        console.log(response)
+      },
+      error: error => {
+        console.log(error)
+      }
+    })
+  }
+  fullLoadStocks() {
+    this.fullLoadService.stockLoad(new FullLoad(this.tokenService.getToken())).subscribe({
+      next: response => {
+        console.log(response)
       },
       error: error => {
         console.log(error)
