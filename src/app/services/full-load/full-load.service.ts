@@ -22,7 +22,6 @@ export class FullLoadService {
     return this.http.post<string>(this.stocksFullLoad, data);
   }
   priceLoad(data: FullLoad): Observable<string> {
-    console.log('тут')
     return this.http.post<string>(this.priceFullLoad, data);
   }
 }

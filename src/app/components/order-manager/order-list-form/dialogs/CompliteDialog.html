@@ -5,8 +5,8 @@
     </div>
     <div mat-dialog-actions>
         <button mat-raised-button [mat-dialog-close]="null">НЕТ</button>
-        <button mat-raised-button style="background: green; color: white;"
-            (click)="onColickCompleteOrder()">Завершить</button>
+        <button mat-raised-button style="background: green; color: white;" (click)="onColickCompleteOrder()"
+            [disabled]="disableButton === true">Завершить</button>
     </div>
 </div>
 
@@ -18,8 +18,8 @@
     </div>
     <div mat-dialog-actions>
         <button mat-raised-button [mat-dialog-close]="null">НЕТ</button>
-        <button mat-raised-button style="background: rgb(255, 166, 0); color: white;"
-            (click)="onClickSendToBitrix()">Отправить</button>
+        <button mat-raised-button style="background: rgb(255, 166, 0); color: white;" (click)="onClickSendToBitrix()"
+            [disabled]="disableButton === true">Отправить</button>
     </div>
 </div>
 
@@ -31,8 +31,8 @@
     </div>
     <div mat-dialog-actions>
         <button mat-raised-button [mat-dialog-close]="null">НЕТ</button>
-        <button mat-raised-button style="background: blue; color: white;"
-            (click)="onClickReturnToAssembly()">Вернуть</button>
+        <button mat-raised-button style="background: blue; color: white;" (click)="onClickReturnToAssembly()"
+            [disabled]="disableButton === true">Вернуть</button>
     </div>
 </div>
 
@@ -46,7 +46,7 @@
     <div mat-dialog-actions>
         <button mat-raised-button [mat-dialog-close]="null">НЕТ</button>
         <button mat-raised-button style="background: rgba(65, 155, 38, 0.877); color: white;"
-            (click)="onClickWriteToCashbox()">Записать</button>
+            (click)="onClickWriteToCashbox()" [disabled]="disableButton === true">Записать</button>
     </div>
 </div>
 
@@ -57,7 +57,7 @@
     </div>
     <div mat-dialog-actions>
         <button mat-raised-button [mat-dialog-close]="null">НЕТ</button>
-        <button mat-raised-button style="background: green; color: white;"
-            (click)="onClickReturnToRetail()">Возвращен</button>
+        <button mat-raised-button style="background: green; color: white;" (click)="onClickReturnToRetail()"
+            [disabled]="disableButton === true">Возвращен</button>
     </div>
 </div>

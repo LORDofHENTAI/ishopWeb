@@ -420,7 +420,8 @@ export class OrderListFormComponent implements OnInit {
 
   openCompliteDialog(element: OrderListAnsw, dialogType: number): void {
     const compliteDialog = this.dialog.open(CompliteDialog, {
-      data: { action: this.action, element: element, dialogType: dialogType }
+      data: { action: this.action, element: element, dialogType: dialogType },
+      disableClose: true,
     });
     compliteDialog.afterClosed().subscribe(result => {
       console.log(result);
@@ -498,8 +499,10 @@ export class CompliteDialog {
 
   @Input() action: string = this.data.action;
   @Input() dialogType: number = this.data.dialogType;
+  disableButton = false;
 
   onColickCompleteOrder(element: OrderListAnsw = this.data.element) {
+    this.disableButton = true;
     let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
     this.orderService.orderCompliteOrder(findOrderReq).subscribe({
       next: response => {
@@ -515,6 +518,7 @@ export class CompliteDialog {
   }
 
   onClickSendToBitrix(element: OrderListAnsw = this.data.element) {
+    this.disableButton = true;
     let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
     this.orderService.orderSendToBitrix(findOrderReq).subscribe({
       next: response => {
@@ -530,6 +534,7 @@ export class CompliteDialog {
   }
 
   onClickReturnToAssembly(id = this.data.element.sub_num) {
+    this.disableButton = true;
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), id);
     this.orderService.orderReturnToAssembly(pauseOrderReq).subscribe({
       next: response => {
@@ -546,7 +551,7 @@ export class CompliteDialog {
   }
 
   onClickWriteToCashbox(element: OrderListAnsw = this.data.element) {
-
+    this.disableButton = true;
     let toCassa = new ToCassa(this.tokenService.getToken(), element.order.num, element.order.sub_num);
     this.orderService.orderWriteToCashbox(toCassa).subscribe({
       next: response => {
@@ -563,6 +568,7 @@ export class CompliteDialog {
   }
 
   onClickReturnToRetail(element: OrderListAnsw = this.data.element) {
+    this.disableButton = true;
     let returnToRetailOrder = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
     this.orderService.orderReturnToRetail(returnToRetailOrder).subscribe({
       next: response => {
