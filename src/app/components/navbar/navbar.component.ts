@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { UnloadingComponent } from './unloading-dialog/unloading/unloading.component';
 import { GroupToArticleComponent } from './group-to-article/group-to-article.component';
+import { DataInvoiceDialogComponent } from './data-invoice-dialog/data-invoice-dialog.component';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -63,6 +64,13 @@ export class NavbarComponent implements OnInit {
   }
   openGroupToArticleDialog() {
     const dialogRef = this.dialog.open(GroupToArticleComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+    })
+  }
+
+  openDataInvoiceDialog() {
+    const dialogRef = this.dialog.open(DataInvoiceDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
     })

@@ -29,6 +29,7 @@
             <a mat-menu-item>{{userName}}</a>
             <a mat-menu-item (click)="openDialog()" *ngIf="isAdminIshop">Выгрузка</a>
             <a mat-menu-item (click)="openGroupToArticleDialog()" *ngIf="isAdminIshop">Excel</a>
+            <a mat-menu-item (click)="openDataInvoiceDialog()" *ngIf="isAdminIshop">Настройка договоров</a>
             <a mat-menu-item (click)="onClickLogout()">Выйти</a>
         </mat-menu>
     </div>

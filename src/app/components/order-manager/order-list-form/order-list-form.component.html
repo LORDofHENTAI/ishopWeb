@@ -207,6 +207,24 @@
                                 Завершить заказ
                             </span>
                         </button>
+                        <button mat-menu-item *ngIf="(element.status === 'завершен')"
+                            (click)="openInvoiceDialog(element, 1)">
+                            <mat-icon style="color: rgb(31, 134, 134);">
+                                assignment
+                            </mat-icon>
+                            <span style="color: rgb(31, 134, 134);">
+                                Счет-фактура
+                            </span>
+                        </button>
+                        <button mat-menu-item *ngIf="(element.status === 'завершен')"
+                            (click)="openInvoiceDialog(element, 2)">
+                            <mat-icon style="color: rgb(9, 60, 170);">
+                                assignment
+                            </mat-icon>
+                            <span style="color: rgb(9, 60, 170);">
+                                Разовый договор
+                            </span>
+                        </button>
                     </mat-menu>
                 </td>
             </ng-container>

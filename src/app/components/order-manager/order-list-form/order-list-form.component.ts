@@ -20,6 +20,8 @@ import { environment } from 'src/environments/environment';
 import { FindOrderByAdReq } from 'src/app/models/order-models/find-order-by-ad-req';
 import { element } from 'protractor';
 import { Status } from 'src/app/models/status';
+import { InvoiceDialogComponent } from './dialogs/invoice-dialog/invoice-dialog.component';
+
 
 @Component({
   selector: 'app-order-list-form',
@@ -442,6 +444,16 @@ export class OrderListFormComponent implements OnInit {
     });
   }
 
+  openInvoiceDialog(element: OrderListAnsw, dialogType: number) {
+    const invoiceDialog = this.dialog.open(InvoiceDialogComponent, {
+      data: { dialogType: dialogType, element: element }
+    })
+    invoiceDialog.afterClosed().subscribe(result => {
+      console.log(result)
+      if (result === false)
+        this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect)
+    })
+  }
 }
 
 
