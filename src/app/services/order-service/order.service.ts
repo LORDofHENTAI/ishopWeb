@@ -89,6 +89,7 @@ export class OrderService {
   }
 
   orderSendToBitrix(data: FindOrderReq): Observable<string> {
+    console.log(data);
     return this.http.post<string>(`${this.urlToBitrix}`, data);
   }
 
@@ -101,6 +102,7 @@ export class OrderService {
   }
 
   orderCompliteOrder(data: FindOrderReq): Observable<string> {
+    console.log(data);
     return this.http.post<string>(`${this.urlEndOrder}`, data);
   }
 

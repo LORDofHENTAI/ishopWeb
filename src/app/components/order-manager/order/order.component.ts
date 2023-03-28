@@ -429,7 +429,7 @@ export class orderCompleteDialog {
 
   }
   onColickCompleteOrder() {
-    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), this.data.num, '');
+    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), this.data.orderBodyAnsw.num, '');
     this.orderService.orderCompliteOrder(findOrderReq).subscribe({
       next: response => {
         if (response) {

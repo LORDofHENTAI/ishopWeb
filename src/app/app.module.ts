@@ -26,6 +26,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+
 // -----------------------------------------------------------------------------------------
 import { CompliteDialog } from './components/order-manager/order-list-form/order-list-form.component';
 import { DeleteDialog } from './components/order-manager/order-list-form/order-list-form.component';
@@ -61,6 +65,9 @@ import { orderCompleteDialog } from './components/order-manager/order/order.comp
 import { OrderReturnToRetailComponent } from './components/order-manager/order-types/order-return-to-retail/order-return-to-retail.component';
 import { UnloadingComponent } from './components/navbar/unloading-dialog/unloading/unloading.component';
 import { GroupToArticleComponent } from './components/navbar/group-to-article/group-to-article.component';
+import { InvoiceDialogComponent } from './components/order-manager/order-list-form/dialogs/invoice-dialog/invoice-dialog.component';
+import { SafeUrlPipe } from './pipes/safeUrl.pipe';
+import { DataInvoiceDialogComponent } from './components/navbar/data-invoice-dialog/data-invoice-dialog.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +101,10 @@ import { GroupToArticleComponent } from './components/navbar/group-to-article/gr
     orderCompleteDialog,
     OrderReturnToRetailComponent,
     UnloadingComponent,
-    GroupToArticleComponent
+    GroupToArticleComponent,
+    InvoiceDialogComponent,
+    SafeUrlPipe,
+    DataInvoiceDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -126,8 +136,11 @@ import { GroupToArticleComponent } from './components/navbar/group-to-article/gr
     MatCheckboxModule,
     SmoothScrollModule,
     MatGridListModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
-  providers: [HttpClient, Title, CookieService, OrderListFormComponent, OrderComponent],
+  providers: [HttpClient, Title, CookieService, OrderListFormComponent, OrderComponent, MatNativeDateModule, { provide: MAT_DATE_LOCALE, useValue: 'be-BY' }],
   entryComponents: [
     BarcodeInputCountFormComponent,
     ConfirmReturnProductComponent,
