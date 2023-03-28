@@ -54,7 +54,6 @@ export class InvoiceDialogComponent implements OnInit {
 
 
   showInvoice() {
-
     const sendManager = `${this.selectedManager.job_title}________________/${this.selectedManager.fio}/`
     const invoiceNum = `СЧ29.${this.order.order.num}.${this.order.order.name}`;
     this.showIFrame = true;
@@ -63,6 +62,7 @@ export class InvoiceDialogComponent implements OnInit {
       this.url = `${environment.apiUrl}/api/FastReport/ShowReportWithoutDelivery?Id=${this.order.order.sub_num}&EndTime=${this.selectedDaysCount}&Manager=${sendManager}&Date=${this.nowFormatted}&NameDocument=${invoiceNum}&DaysForBank=${this.selectedDaysCount}`
     else
       this.url = `${environment.apiUrl}/api/FastReport/ShowReportInvoice?Id=${this.order.order.sub_num}&EndTime=${this.selectedDaysCount}&Manager=${sendManager}&Date=${this.nowFormatted}&NameDocument=${invoiceNum}&DaysForBank=${this.selectedDaysCount}`
+
   }
 
 

@@ -10,6 +10,7 @@ export const environment = {
   // apiUrl: 'http://192.168.1.122:7118',
   apiUrlLog: 'http://192.168.7.186:80',
   apiUrl: 'http://192.168.7.186:80',
+
   apiUrlImg: 'https://mile.by/gtools/getImg/index.php',
   cookieName: 'user-ishope-mile',
   listAdminsIshop: ['maksimovich_v', 'shegolov_a', 'orlova_v', 'bondarenko_v', 'fesko_n'],
