@@ -40,6 +40,8 @@ export class OrdersFormComponent implements OnInit {
     private orderSearchService: OrderSearchService,) { }
 
   ngOnInit(): void {
+    this.tabIndex = Number(localStorage.getItem('tabIndex'))
+    console.log(this.tabIndex)
     console.log(this.tokenService.getToken())
     this.titleService.setTitle('IShop Mile');
     this.isAdminIshop = this.getAdminIshop();
@@ -59,6 +61,7 @@ export class OrdersFormComponent implements OnInit {
 
   selectedTab($event) {
     this.tabIndex = $event.index;
+    localStorage.setItem('tabIndex', String(this.tabIndex));
     if (this.searchNumOrder)
       this.orderSearchService.searchEvent({ order: this.searchNumOrder, shop: this.tabIndex });
     this.timerValue = 120;

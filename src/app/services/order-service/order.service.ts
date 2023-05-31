@@ -15,7 +15,8 @@ import { Status } from 'src/app/models/status';
 import { Changer } from 'src/app/models/order-models/changer';
 import { DelPostRequest } from 'src/app/models/order-models/del-post-request';
 import { FindOrderByAdReq } from 'src/app/models/order-models/find-order-by-ad-req';
-
+import { orderHistoryReq } from 'src/app/models/order-models/order-history';
+import { orderHistoryRes } from 'src/app/models/order-models/order-history-Res';
 @Injectable({
   providedIn: 'root'
 })
@@ -37,6 +38,9 @@ export class OrderService {
   urlDelpost = this.urlOrder + '/delpost/';
   urlEndOrder = this.urlOrder + '/endOrder/';
   urlReturnToRetail = this.urlOrder + '/returnToRetail/';
+  urlGetHistory = this.urlOrder + '/GetHistory/';
+  urlGetHistoryByDate = this.urlOrder + '/statusHistoryByDate/';
+  urlGetHistoryByOrder = this.urlOrder + '/GetHistoryByOrder/';
 
   constructor(private http: HttpClient) { }
 
@@ -108,5 +112,15 @@ export class OrderService {
 
   orderReturnToRetail(data: PauseOrderReq): Observable<string> {
     return this.http.post<string>(`${this.urlReturnToRetail}`, data);
+  }
+
+  orderStatusHistory(data: orderHistoryReq): Observable<orderHistoryRes[]> {
+    return this.http.post<orderHistoryRes[]>(`${this.urlGetHistory}`, data);
+  }
+  orderStatusHistoryByDate(data: orderHistoryReq): Observable<orderHistoryRes[]> {
+    return this.http.post<orderHistoryRes[]>(`${this.urlGetHistoryByDate}`, data);
+  }
+  orderStatusHistoryByOrder(data: orderHistoryReq): Observable<orderHistoryRes[]> {
+    return this.http.post<orderHistoryRes[]>(`${this.urlGetHistoryByOrder}`, data);
   }
 }

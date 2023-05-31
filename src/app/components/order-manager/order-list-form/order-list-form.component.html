@@ -207,7 +207,7 @@
                                 Завершить заказ
                             </span>
                         </button>
-                        <button mat-menu-item *ngIf="(element.status === 'завершен')"
+                        <button mat-menu-item *ngIf="(element.status === 'завершен' || isAdminIshop)"
                             (click)="openInvoiceDialog(element, 1)">
                             <mat-icon style="color: rgb(31, 134, 134);">
                                 assignment
@@ -216,7 +216,7 @@
                                 Счет-фактура
                             </span>
                         </button>
-                        <button mat-menu-item *ngIf="(element.status === 'завершен')"
+                        <!-- <button mat-menu-item *ngIf="(element.status === 'завершен')"
                             (click)="openInvoiceDialog(element, 2)">
                             <mat-icon style="color: rgb(9, 60, 170);">
                                 assignment
@@ -224,7 +224,7 @@
                             <span style="color: rgb(9, 60, 170);">
                                 Разовый договор
                             </span>
-                        </button>
+                        </button> -->
                     </mat-menu>
                 </td>
             </ng-container>

@@ -11,6 +11,7 @@ import { OrderCanceledComponent } from './components/order-manager/order-types/o
 import { EmptyFormComponent } from './components/empty-form/empty-form.component';
 import { OrderCompletedComponent } from './components/order-manager/order-types/order-completed/order-completed.component';
 import { OrderReturnToRetailComponent } from './components/order-manager/order-types/order-return-to-retail/order-return-to-retail.component';
+import { OrderHistoryFormComponent } from './components/order-manager/order-history-form/order-history-form.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/orders/ready-build', pathMatch: 'full' },
@@ -23,9 +24,10 @@ const routes: Routes = [
   { path: 'orders/return-to-retail', component: OrderReturnToRetailComponent },
   { path: 'orders/canceled', component: OrderCanceledComponent },
   { path: 'orders/archive', component: OrdersArchiveComponent },
+  { path: 'orders/archive', component: OrdersArchiveComponent },
   { path: 'orders', component: OrdersFormComponent },
   { path: 'orders/completed', component: OrderCompletedComponent },
-
+  { path: 'orders/statushistory', component: OrderHistoryFormComponent },
   { path: 'empty', component: EmptyFormComponent }
 ];
 

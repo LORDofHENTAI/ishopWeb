@@ -179,7 +179,7 @@ export class OrderComponent implements OnInit {
     this.client = this.orderBodyAnsw.aboutClient;
     this.dataSource = this.orderBodyAnsw.body;
     this.getBelpostBarcodes(this.orderBodyAnsw.postCode);
-    this.orderService.orderSearch(new FindOrderReq(this.tokenService.getToken(), this.orderBodyAnsw.num, this.orderBodyAnsw.name)).subscribe({
+    this.orderService.orderSearch(new FindOrderReq(this.tokenService.getToken(), this.orderBodyAnsw.num, this.orderBodyAnsw.name, this.tokenService.getLogin())).subscribe({
       next: response => {
         if (response)
           this.orderStatus = response[0].status;
@@ -242,7 +242,7 @@ export class OrderComponent implements OnInit {
 
 
     if (!this.orderBodyAnsw.belPost || (this.orderBodyAnsw.belPost && this.belpostBarcodes.length > 0)) {
-      let order = new Changer(this.tokenService.getToken(), this.orderBodyAnsw);
+      let order = new Changer(this.tokenService.getToken(), this.orderBodyAnsw, this.tokenService.getLogin());
       this.orderService.orderSaveChange(order).subscribe({
         next: response => {
           if (response = 'true') {
@@ -429,7 +429,7 @@ export class orderCompleteDialog {
 
   }
   onColickCompleteOrder() {
-    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), this.data.orderBodyAnsw.num, '');
+    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), this.data.orderBodyAnsw.num, '', this.tokenService.getLogin());
     this.orderService.orderCompliteOrder(findOrderReq).subscribe({
       next: response => {
         if (response) {

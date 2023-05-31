@@ -50,6 +50,7 @@ export class NavbarComponent implements OnInit {
   }
 
   onClickLogout() {
+    localStorage.clear();
     this.tokenService.deleteCookie();
     this.isLoginUser = false;
     this.router.navigate(['/login']);

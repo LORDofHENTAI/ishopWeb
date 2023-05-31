@@ -68,6 +68,7 @@ import { GroupToArticleComponent } from './components/navbar/group-to-article/gr
 import { InvoiceDialogComponent } from './components/order-manager/order-list-form/dialogs/invoice-dialog/invoice-dialog.component';
 import { SafeUrlPipe } from './pipes/safeUrl.pipe';
 import { DataInvoiceDialogComponent } from './components/navbar/data-invoice-dialog/data-invoice-dialog.component';
+import { OrderHistoryFormComponent } from './components/order-manager/order-history-form/order-history-form.component';
 
 @NgModule({
   declarations: [
@@ -105,6 +106,7 @@ import { DataInvoiceDialogComponent } from './components/navbar/data-invoice-dia
     InvoiceDialogComponent,
     SafeUrlPipe,
     DataInvoiceDialogComponent,
+    OrderHistoryFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -140,7 +142,7 @@ import { DataInvoiceDialogComponent } from './components/navbar/data-invoice-dia
     MatDatepickerModule,
     MatNativeDateModule
   ],
-  providers: [HttpClient, Title, CookieService, OrderListFormComponent, OrderComponent, MatNativeDateModule, { provide: MAT_DATE_LOCALE, useValue: 'be-BY' }],
+  providers: [HttpClient, Title, CookieService, OrderListFormComponent, OrderComponent, MatNativeDateModule, { provide: MAT_DATE_LOCALE, useValue: 'ru-Ru' }],
   entryComponents: [
     BarcodeInputCountFormComponent,
     ConfirmReturnProductComponent,

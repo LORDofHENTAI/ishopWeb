@@ -186,7 +186,7 @@ export class OrderListFormComponent implements OnInit {
       if (searchValue.order && this.getShop(searchValue.shop) === this.data) {
         this.searchValue = searchValue;
         if (this.searchValue.check === false) {
-          let findOrderReq = new FindOrderReq(this.tokenService.getToken(), searchValue.order, this.data);
+          let findOrderReq = new FindOrderReq(this.tokenService.getToken(), searchValue.order, this.data, this.tokenService.getLogin());
           this.orderService.orderSearch(findOrderReq).subscribe({
             next: response => {
               if (response) {
@@ -219,7 +219,7 @@ export class OrderListFormComponent implements OnInit {
   }
 
   onClickPauseOrGo(element: OrderListAnsw) {
-    let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
+    let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num, this.tokenService.getLogin(), `${element.order.num}.${element.place}`);
     this.orderService.orderPause(pauseOrderReq).subscribe({
       next: response => {
         if (response.status) {
@@ -298,7 +298,7 @@ export class OrderListFormComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
+        let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num, this.tokenService.getLogin(), `${element.order.num}.${element.place}`);
         this.orderService.orderReturn(pauseOrderReq).subscribe({
           next: response => {
             switch (response) {
@@ -335,23 +335,23 @@ export class OrderListFormComponent implements OnInit {
     });
   }
 
-  onClickReturnToAssembly(id) {
-    let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), id);
-    this.orderService.orderReturnToAssembly(pauseOrderReq).subscribe({
-      next: response => {
-        if (response === 'true')
-          this.snackbarService.openSnackBar('Подзаказ возвращен в сборку', this.action,);
-        else this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
-      },
-      error: error => {
-        console.log(error);
-        this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
-      }
-    });
-  }
+  // onClickReturnToAssembly(id) {
+  //   let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), id, this.tokenService.getLogin(), `${element.order.num}.${element.place}`);
+  //   this.orderService.orderReturnToAssembly(pauseOrderReq).subscribe({
+  //     next: response => {
+  //       if (response === 'true')
+  //         this.snackbarService.openSnackBar('Подзаказ возвращен в сборку', this.action,);
+  //       else this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
+  //     },
+  //     error: error => {
+  //       console.log(error);
+  //       this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
+  //     }
+  //   });
+  // }
 
   onDelete(element: OrderListAnsw) {
-    let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
+    let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num, this.tokenService.getLogin(), `${element.order.num}.${element.place}`);
     this.orderService.orderDelete(pauseOrderReq).subscribe({
       next: response => {
         if (response === 'true') {
@@ -382,7 +382,7 @@ export class OrderListFormComponent implements OnInit {
         t.unsubscribe();
       }
     });
-    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
+    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '', this.tokenService.getLogin());
     this.orderService.orderSendToBitrix(findOrderReq).subscribe({
       next: response => {
         if (response) {
@@ -477,7 +477,7 @@ export class DeleteDialog {
   @Input() messageNoConnect = this.data.messageNoConnect;
 
   onDelete(element: OrderListAnsw = this.data.element) {
-    let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
+    let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num, this.tokenService.getLogin(), `${element.order.num}.${String(element.place)}`);
     this.orderService.orderDelete(pauseOrderReq).subscribe({
       next: response => {
         if (response = 'true') {
@@ -515,7 +515,7 @@ export class CompliteDialog {
 
   onColickCompleteOrder(element: OrderListAnsw = this.data.element) {
     this.disableButton = true;
-    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
+    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, element.order.name, this.tokenService.getLogin());
     this.orderService.orderCompliteOrder(findOrderReq).subscribe({
       next: response => {
         if (response) {
@@ -531,7 +531,7 @@ export class CompliteDialog {
 
   onClickSendToBitrix(element: OrderListAnsw = this.data.element) {
     this.disableButton = true;
-    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
+    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, element.order.name, this.tokenService.getLogin());
     this.orderService.orderSendToBitrix(findOrderReq).subscribe({
       next: response => {
         if (response) {
@@ -545,9 +545,9 @@ export class CompliteDialog {
     });
   }
 
-  onClickReturnToAssembly(id = this.data.element.sub_num) {
+  onClickReturnToAssembly(id = this.data.element.sub_num, order_num = `${this.data.element.num}.${this.data.element.num}`) {
     this.disableButton = true;
-    let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), id);
+    let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), id, this.tokenService.getLogin(), order_num);
     this.orderService.orderReturnToAssembly(pauseOrderReq).subscribe({
       next: response => {
         if (response = 'true')
@@ -581,7 +581,7 @@ export class CompliteDialog {
 
   onClickReturnToRetail(element: OrderListAnsw = this.data.element) {
     this.disableButton = true;
-    let returnToRetailOrder = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num);
+    let returnToRetailOrder = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num, this.tokenService.getLogin(), `${element.order.num}.${element.place}`);
     this.orderService.orderReturnToRetail(returnToRetailOrder).subscribe({
       next: response => {
         console.log(response);

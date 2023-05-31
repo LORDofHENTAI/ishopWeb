@@ -10,9 +10,11 @@
     <a mat-list-item [routerLink]="['/orders/completed']" [routerLinkActive]="['active']"
         (click)="reload('/orders/completed')"> Выполнен </a>
     <a mat-list-item [routerLink]="['orders/return-to-retail']" [routerLinkActive]="['active']"
-        (click)="reload('/orders/return-to-retail')">Вернуть в секцию</a>
+        (click)="reload('/orders/return-to-retail')" *ngIf="isAdminIshop">Вернуть в секцию</a>
     <a mat-list-item [routerLink]="['orders/canceled']" [routerLinkActive]="['active']"
         (click)="reload('/orders/canceled')"> Отменен </a>
     <a mat-list-item [routerLink]="['orders/archive']" [routerLinkActive]="['active']"
         (click)="reload('/orders/archive')"> Архив </a>
+    <a mat-list-item [routerLink]="['orders/statushistory']" [routerLinkActive]="['active']"
+        (click)="reload('/orders/archive')" *ngIf="isAdminIshop"> История заказов </a>
 </mat-nav-list>

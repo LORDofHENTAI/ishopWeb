@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   // apiUrlLog: 'http://192.168.1.232:120',
   // apiUrl: 'http://192.168.1.232:120',
-  // apiUrlLog: 'http://192.168.1.122:7118',
-  // apiUrl: 'http://192.168.1.122:7118',
+  // apiUrlLog: 'http://192.168.1.123:80',
+  // apiUrl: 'http://192.168.1.123:80',
   apiUrlLog: 'http://192.168.7.186:80',
   apiUrl: 'http://192.168.7.186:80',
 

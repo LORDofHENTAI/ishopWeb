@@ -1,0 +1,63 @@
+.main{
+    width: 80vw;
+    height: 89.5vh;
+
+
+    ::ng-deep .mat-form-field-wrapper{
+        padding: 0!important;
+    }
+    *::-webkit-scrollbar,
+    html *::-webkit-scrollbar {
+        height: 5px;
+        width: 4px;
+    }
+    *::-webkit-scrollbar-track,
+    html *::-webkit-scrollbar-track {
+        background: inherit;
+        margin: 8px;
+    }
+    *::-webkit-scrollbar-thumb,
+    html *::-webkit-scrollbar-thumb {
+        background-color: #6440b6;
+        border-radius: 5px;
+    }
+    .input-conteiner{
+        width: 100%;
+        
+        mat-form-field{
+            margin: 10px;
+        }
+        button{
+            margin: 5px;
+            
+        }
+    }
+    .table-container{
+        width: 100%;
+        min-height: 90%;
+        overflow: auto;
+        max-height: 220px;
+
+        border-top-right-radius: 40px;
+    }
+    table{
+        text-align: center;
+        width: 100%;
+        border-spacing: 0px;
+        border-collapse: collapse;
+        tr:first-child{
+            background: #6440b6;
+            color: #fff;
+            height: 50px;
+        }
+    }
+    .row-table{
+        transition: 0.3s;
+        height: 40px;
+        
+    }
+    .row-table:hover{
+        background: #6e54aa;
+        color: #fff;
+    }
+}

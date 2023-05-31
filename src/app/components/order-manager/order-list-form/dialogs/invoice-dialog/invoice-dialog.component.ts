@@ -31,7 +31,7 @@ export class InvoiceDialogComponent implements OnInit {
     private tokenService: TokenService
 
   ) {
-    this.nowFormatted = formatDate(this.selectedDate, 'dd.MM.yyyy', 'en-US');
+
   }
   @Input() dialogType: number = this.data.dialogType;
   @Input() order: OrderListAnsw = this.data.element
@@ -57,7 +57,8 @@ export class InvoiceDialogComponent implements OnInit {
     const sendManager = `${this.selectedManager.job_title}________________/${this.selectedManager.fio}/`
     const invoiceNum = `СЧ29.${this.order.order.num}.${this.order.order.name}`;
     this.showIFrame = true;
-    console.log(this.order)
+    console.log(this.nowFormatted)
+    this.nowFormatted = formatDate(this.selectedDate, 'dd.MM.yyyy', 'en-US');
     if (this.order.order.delivery_type === '')
       this.url = `${environment.apiUrl}/api/FastReport/ShowReportWithoutDelivery?Id=${this.order.order.sub_num}&EndTime=${this.selectedDaysCount}&Manager=${sendManager}&Date=${this.nowFormatted}&NameDocument=${invoiceNum}&DaysForBank=${this.selectedDaysCount}`
     else

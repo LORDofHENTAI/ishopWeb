@@ -3,5 +3,6 @@ export class FindOrderReq {
         public token: string,
         public num: string,
         public store: string,
+        public userName: string,
     ) { }
 }
