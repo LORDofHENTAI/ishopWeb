@@ -13,7 +13,7 @@ import { TokenService } from 'src/app/services/token/token.service';
 export class DataInvoiceDialogComponent implements OnInit {
 
   displayedColumns: string[] = ['ФИО', 'Должность', 'Действие'];
-  displayedColumns1: string[] = ['ФИО', 'Место хранения', 'Доверенность', 'Действие'];
+  displayedColumns1: string[] = ['ФИО', 'Место хранения', 'Доверенность', 'Должность', 'Действие'];
   constructor(private dataInvoiceService: DataInvoiceService, private tokenService: TokenService) {
   }
   managerList: Array<ManagerModel> = [new ManagerModel(0, '', '')]
@@ -25,6 +25,7 @@ export class DataInvoiceDialogComponent implements OnInit {
   director_fio: string
   storelock: number
   dover: string
+  dolj: string
 
   updateId: number;
   ngOnInit(): void {
@@ -130,7 +131,7 @@ export class DataInvoiceDialogComponent implements OnInit {
   }
 
   createDirectors() {
-    const createDirector = new DirectorModel(0, this.director_fio, this.storelock, this.dover)
+    const createDirector = new DirectorModel(0, this.director_fio, this.storelock, this.dover, this.dolj)
     this.dataInvoiceService.createDirectors(createDirector).subscribe({
       next: result => {
         if (result = 'true')
@@ -146,7 +147,7 @@ export class DataInvoiceDialogComponent implements OnInit {
   }
 
   updateDirectors() {
-    const updateDirector = new DirectorModel(this.updateId, this.director_fio, this.storelock, this.dover)
+    const updateDirector = new DirectorModel(this.updateId, this.director_fio, this.storelock, this.dover, this.dolj)
     this.dataInvoiceService.updateDirectors(updateDirector).subscribe({
       next: result => {
         if (result = 'true')

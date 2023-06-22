@@ -41,7 +41,6 @@ export class OrdersFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.tabIndex = Number(localStorage.getItem('tabIndex'))
-    console.log(this.tabIndex)
     console.log(this.tokenService.getToken())
     this.titleService.setTitle('IShop Mile');
     this.isAdminIshop = this.getAdminIshop();
