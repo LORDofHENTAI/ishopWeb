@@ -13,7 +13,7 @@ import { TokenService } from 'src/app/services/token/token.service';
 export class DataInvoiceDialogComponent implements OnInit {
 
   displayedColumns: string[] = ['ФИО', 'Должность', 'Действие'];
-  displayedColumns1: string[] = ['ФИО', 'Место хранения', 'Доверенность', 'Должность', 'Действие'];
+  displayedColumns1: string[] = ['ФИО', 'Место хранения', 'Доверенность', 'Должность', 'Должность по тексту', 'Действие'];
   constructor(private dataInvoiceService: DataInvoiceService, private tokenService: TokenService) {
   }
   managerList: Array<ManagerModel> = [new ManagerModel(0, '', '')]

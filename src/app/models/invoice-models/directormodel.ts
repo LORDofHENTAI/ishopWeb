@@ -4,6 +4,7 @@ export class DirectorModel {
         public fio?: string,
         public storeloc?: number,
         public power_of_attorney?: string,
-        public dolj?: string
+        public dolj?: string,
+        public doc_dolj?: string
     ) { }
 }
