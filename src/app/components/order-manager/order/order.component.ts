@@ -24,6 +24,7 @@ import { DelPostRequest } from 'src/app/models/order-models/del-post-request';
 import { element } from 'protractor';
 import { FindOrderReq } from 'src/app/models/order-models/find-order-req';
 import { OrderListAnsw } from 'src/app/models/order-models/order-list-answ';
+import { PauseOrderReq } from 'src/app/models/order-models/pause-order-req';
 
 export interface BelpostData {
   barcode: string,
@@ -364,6 +365,24 @@ export class OrderComponent implements OnInit {
         this.snackbarService.openSnackBar('Заказ завершен', this.action);
     });
   }
+
+  onClickPauseOrGo() {
+    let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), this.orderBodyAnsw.sub_num, this.tokenService.getLogin(), `${this.orderBodyAnsw.num}.${this.orderBodyAnsw.place}`);
+    this.orderService.orderPause(pauseOrderReq).subscribe({
+      next: response => {
+        if (response.status) {
+          if (this.orderStatus === 'не принят')
+          this.orderStatus = 'ОТЛОЖЕН'
+          else
+            if (this.orderStatus === 'ОТЛОЖЕН')
+            this.orderStatus = 'не принят'
+        }
+      },
+      error: error => {
+        console.log(error);
+      }
+    });
+  }
 }
 
 
@@ -410,7 +429,7 @@ export class BelpostDelete {
       }
     });
   }
-
+  
 }
 
 @Component({
@@ -442,4 +461,6 @@ export class orderCompleteDialog {
       }
     });
   }
+
+
 }

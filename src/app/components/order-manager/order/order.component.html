@@ -39,6 +39,7 @@
     <button mat-stroked-button (click)="openStoragePrintBarcodeDialog()" *ngIf="orderBodyAnsw.belPost">
         <img src="../../assets/barcode-icon.png" width="28" />
     </button>
+    <button mat-stroked-button (click)="onClickPauseOrGo()" *ngIf="orderStatus === 'не принят'">Начать сборку</button>
 </div>
 
 <div class="form-inline" *ngIf="orderBodyAnsw.belPost">

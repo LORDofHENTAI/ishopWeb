@@ -22,7 +22,7 @@
                     {{h}}
                 </th>
             </tr>
-            <tr *ngFor="let rows of historyList" class="row-table">
+            <tr *ngFor="let rows of historyList| slice: 0: 200" class="row-table">
                 <td>
                     {{rows.order}}
                 </td>
