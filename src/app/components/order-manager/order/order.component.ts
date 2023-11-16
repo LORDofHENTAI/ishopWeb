@@ -25,6 +25,7 @@ import { element } from 'protractor';
 import { FindOrderReq } from 'src/app/models/order-models/find-order-req';
 import { OrderListAnsw } from 'src/app/models/order-models/order-list-answ';
 import { PauseOrderReq } from 'src/app/models/order-models/pause-order-req';
+import { environment } from 'src/environments/environment';
 
 export interface BelpostData {
   barcode: string,
@@ -43,9 +44,9 @@ export class OrderComponent implements OnInit {
   @Input() data: string;
   @ViewChild('barcodePrint', { static: true }) barcodePrint: any;
 
-  displayedColumns = ['Артикул', ' ', 'Штрихкод', 'Наименование', 'Требуемое количество', 'Собранное количество'];
-  displayedColumnsPrint = ['article', 'barcode', 'name', 'count', 'countReady', 'vatz', 'cost'];
-  dataSource: Array<OrderBody> = [new OrderBody('', '', '', '', '0', '0', '0', false, '', '', '')];
+  displayedColumns = ['Артикул', ' ', 'Штрихкод', 'Наименование', 'ед. изм.', 'Количество на складе', 'Требуемое количество', 'Собранное количество'];
+  displayedColumnsPrint = ['article', 'barcode', 'name', 'mes', 'count_e_s', 'count', 'countReady', 'cost'];
+  dataSource: Array<OrderBody> = [new OrderBody('', '', '', '', '0', '0', '0', false, '', '', '', '')];
   client: ClientInfo = new ClientInfo('', '', '');
   orderId = '';
   isDataChanged = false;
@@ -78,6 +79,7 @@ export class OrderComponent implements OnInit {
   filteredFruits: Observable<string[]>;
   fruits: string[] = [];
   allFruits: string[] = [' 01Bepx', ' 01Hu3', ' 02Bepx', ' 03Bepx', ' 04Bepx', ' 05Hu3', ' colona1', ' D03Bepx', ' Poddon', ' Telezka', 'A0', 'A00', 'A001', 'A002', 'A003', 'A004', 'A005', 'A006', 'A008', 'A009', 'A010', 'A029', 'A030', 'A031', 'A032', 'A033', 'A034', 'B001'];
+  isAdminIshop = false;
 
   @ViewChild('fruitInput') fruitInput!: ElementRef<HTMLInputElement>;
   /* */
@@ -136,7 +138,7 @@ export class OrderComponent implements OnInit {
     return this.allFruits.filter(fruit => fruit.toLowerCase().includes(filterValue));
   }
   /**/
-
+  completButtonStatus: boolean = true;
   ngOnInit(): void {
     this.titleService.setTitle(this.titleService.getTitle() + ' №' + this.orderId);
     let orderBodyReq = new OrderBodyReq(this.tokenService.getToken(), this.orderId)
@@ -152,8 +154,18 @@ export class OrderComponent implements OnInit {
       }
     });
     this.userName = this.tokenService.getLogin();
-  }
+    this.isAdminIshop = this.getAdminIshop();
 
+  }
+  completOrder() {
+    this.dataSource.forEach(i => {
+      i.count_g = i.count_e
+    })
+    this.completButtonStatus = false
+  }
+  getAdminIshop(): boolean {
+    return environment.listAdminsIshop.includes(this.tokenService.getLogin().toLowerCase());
+  }
   selectBarcode(barcode: any) {
     this.selectedBarcode = barcode;
     console.log(this.selectedBarcode);
@@ -179,6 +191,12 @@ export class OrderComponent implements OnInit {
     this.fruits = response.place;
     this.client = this.orderBodyAnsw.aboutClient;
     this.dataSource = this.orderBodyAnsw.body;
+    this.dataSource.forEach(element => {
+      if (element.count_g != element.count_e) {
+        this.completButtonStatus = false
+        return
+      }
+    });
     this.getBelpostBarcodes(this.orderBodyAnsw.postCode);
     this.orderService.orderSearch(new FindOrderReq(this.tokenService.getToken(), this.orderBodyAnsw.num, this.orderBodyAnsw.name, this.tokenService.getLogin())).subscribe({
       next: response => {
@@ -324,10 +342,6 @@ export class OrderComponent implements OnInit {
     // });
   }
 
-  endOrder() {
-    this.snackbarService.openSnackBar('coming soon', this.action);
-  }
-
   openDeleteDialog(barcode: any, sub_num: any): void {
     const deleteDialog = this.dialog.open(BelpostDelete, {
       data: { barcode: barcode, sub_num: sub_num }
@@ -370,19 +384,15 @@ export class OrderComponent implements OnInit {
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), this.orderBodyAnsw.sub_num, this.tokenService.getLogin(), `${this.orderBodyAnsw.num}.${this.orderBodyAnsw.place}`);
     this.orderService.orderPause(pauseOrderReq).subscribe({
       next: response => {
-        if (response.status) {
-          if (this.orderStatus === 'не принят')
-          this.orderStatus = 'ОТЛОЖЕН'
-          else
-            if (this.orderStatus === 'ОТЛОЖЕН')
-            this.orderStatus = 'не принят'
-        }
+        this.orderStatus = 'ОТЛОЖЕН'
       },
       error: error => {
         console.log(error);
       }
     });
   }
+
+
 }
 
 
@@ -429,7 +439,7 @@ export class BelpostDelete {
       }
     });
   }
-  
+
 }
 
 @Component({

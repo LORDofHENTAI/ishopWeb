@@ -22,7 +22,7 @@
                             <div class="ready-collect"> готов к сборке </div>
                         </ng-template>
                         <ng-template ngSwitchCase="ОТЛОЖЕН">
-                            <div class="set-aside"> отложен </div>
+                            <div class="set-aside"> в сборке </div>
                         </ng-template>
                         <ng-template ngSwitchCase="в сборке">
                             <div class="assembly"> в сборке </div>
@@ -141,7 +141,7 @@
                             <span style="color: rgba(65, 155, 38, 0.877);">Запись в кассу</span>
                         </button> -->
                         <button mat-menu-item (click)="openCompliteDialog(element, 4)"
-                            *ngIf="element.order.isCassa && element.status === 'завершен'"
+                            *ngIf="element.order.isCassa && (element.status === 'завершен' || element.status === 'Выполнен')"
                             [disabled]="element.order.isCassaPause">
                             <mat-icon style="color: rgba(65, 155, 38, 0.877);">move_to_inbox</mat-icon>
                             <span style="color: rgba(65, 155, 38, 0.877);">Запись в кассу</span>

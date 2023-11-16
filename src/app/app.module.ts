@@ -29,7 +29,6 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
-
 // -----------------------------------------------------------------------------------------
 import { CompliteDialog } from './components/order-manager/order-list-form/order-list-form.component';
 import { DeleteDialog } from './components/order-manager/order-list-form/order-list-form.component';
@@ -69,6 +68,7 @@ import { InvoiceDialogComponent } from './components/order-manager/order-list-fo
 import { SafeUrlPipe } from './pipes/safeUrl.pipe';
 import { DataInvoiceDialogComponent } from './components/navbar/data-invoice-dialog/data-invoice-dialog.component';
 import { OrderHistoryFormComponent } from './components/order-manager/order-history-form/order-history-form.component';
+import { InstructionDialogComponent } from './components/navbar/instruction-dialog/instruction-dialog.component';
 
 @NgModule({
   declarations: [
@@ -107,6 +107,7 @@ import { OrderHistoryFormComponent } from './components/order-manager/order-hist
     SafeUrlPipe,
     DataInvoiceDialogComponent,
     OrderHistoryFormComponent,
+    InstructionDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -11,5 +11,7 @@ export class OrderBody {
         public price: string,
         public vatz: string,
         public remote_stock: string,
+        public measure?: string,
+        public count_e_s?: string
     ) { }
 }
