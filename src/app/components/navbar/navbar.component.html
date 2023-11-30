@@ -1,9 +1,9 @@
 <div class='navbar'
-    [ngClass]="userName == 'orlova_v' ? 'custom' : (userName == 'maksimovich_v' ? 'customV' : 'standart')">
+    [ngClass]="userName == 'kovalevskaya_e' ? 'custom' : (userName == 'maksimovich_v' ? 'customV' : 'standart')">
     <div class="navbar-logo">
         <a href="#">IShop Mile</a>
     </div>
-    <div class="butterfly-conteiner" *ngIf="userName == 'orlova_v'">
+    <div class="butterfly-conteiner" *ngIf="userName == 'kovalevskaya_e'">
         <div class="butterfly">
             <div class="wing">
                 <div class="bit"></div>
@@ -28,7 +28,7 @@
         <mat-menu #menu="matMenu">
             <a mat-menu-item>{{userName}}</a>
             <a mat-menu-item (click)="opentInstructionDialog()">Инструкции</a>
-            <a mat-menu-item (click)="openDialog()" *ngIf="isAdminIshop">Выгрузка</a>
+            <!-- <a mat-menu-item (click)="openDialog()" *ngIf="isAdminIshop">Выгрузка</a> -->
             <a mat-menu-item (click)="openGroupToArticleDialog()" *ngIf="isAdminIshop">Excel</a>
             <a mat-menu-item (click)="openDataInvoiceDialog()" *ngIf="isAdminIshop">Настройка договоров</a>
             <a mat-menu-item (click)="onClickLogout()">Выйти</a>

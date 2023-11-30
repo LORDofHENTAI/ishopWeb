@@ -26,7 +26,7 @@ export class DataInvoiceDialogComponent implements OnInit {
   storelock: number
   dover: string
   dolj: string
-
+  doc_dolj: string
   updateId: number;
   ngOnInit(): void {
   }
@@ -54,12 +54,13 @@ export class DataInvoiceDialogComponent implements OnInit {
     this.job_title = job
     this.updateId = id
   }
-  switchEditableDir(fio, store, dover, id) {
+  switchEditableDir(fio, store, dover, id, doc_dolj) {
     this.editable = !this.editable
     this.director_fio = fio
     this.storelock = store
     this.dover = dover
     this.updateId = id
+    this.doc_dolj = doc_dolj
   }
 
   getMangers() {
@@ -131,7 +132,7 @@ export class DataInvoiceDialogComponent implements OnInit {
   }
 
   createDirectors() {
-    const createDirector = new DirectorModel(0, this.director_fio, this.storelock, this.dover, this.dolj)
+    const createDirector = new DirectorModel(0, this.director_fio, this.storelock, this.dover, this.dolj, this.doc_dolj)
     this.dataInvoiceService.createDirectors(createDirector).subscribe({
       next: result => {
         if (result = 'true')
@@ -139,6 +140,7 @@ export class DataInvoiceDialogComponent implements OnInit {
         this.director_fio = ''
         this.storelock = null
         this.dover = ''
+        this.doc_dolj = ''
       },
       error: error => {
         console.log(error)
@@ -147,7 +149,7 @@ export class DataInvoiceDialogComponent implements OnInit {
   }
 
   updateDirectors() {
-    const updateDirector = new DirectorModel(this.updateId, this.director_fio, this.storelock, this.dover, this.dolj)
+    const updateDirector = new DirectorModel(this.updateId, this.director_fio, this.storelock, this.dover, this.dolj, this.doc_dolj)
     this.dataInvoiceService.updateDirectors(updateDirector).subscribe({
       next: result => {
         if (result = 'true')
@@ -156,6 +158,7 @@ export class DataInvoiceDialogComponent implements OnInit {
         this.director_fio = ''
         this.storelock = null
         this.dover = ''
+        this.doc_dolj = ''
       },
       error: error => {
         console.log(error)

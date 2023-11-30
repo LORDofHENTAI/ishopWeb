@@ -71,12 +71,16 @@
                 <mat-label>Должность</mat-label>
                 <input matInput [(ngModel)]="dolj">
             </mat-form-field>
-            <button mat-raised-button [disabled]="!director_fio || !storelock || !dover" *ngIf="editable === false"
-                (click)="createDirectors()">
+            <mat-form-field appearance="outline">
+                <mat-label>Должность по тексту</mat-label>
+                <input matInput [(ngModel)]="doc_dolj">
+            </mat-form-field>
+            <button mat-raised-button [disabled]="!director_fio || !storelock || !dover || !doc_dolj"
+                *ngIf="editable === false" (click)="createDirectors()">
                 Добавить
             </button>
-            <button mat-raised-button [disabled]="!director_fio || !storelock || !dover" *ngIf="editable === true"
-                (click)="updateDirectors()">
+            <button mat-raised-button [disabled]="!director_fio || !storelock || !dover || !doc_dolj"
+                *ngIf="editable === true" (click)="updateDirectors()">
                 Изменить
             </button>
         </div>
@@ -111,7 +115,7 @@
                         </button>
                         <mat-menu #menu="matMenu">
                             <button mat-menu-item
-                                (click)="switchEditableDir(rows1.fio, rows1.storeloc, rows1.power_of_attorney, rows1.id)">Изменить</button>
+                                (click)="switchEditableDir(rows1.fio, rows1.storeloc, rows1.power_of_attorney, rows1.id, rows1.doc_dolj)">Изменить</button>
                             <button mat-menu-item (click)="deleteDirectors(rows1.id)">Удалить</button>
                         </mat-menu>
                     </td>

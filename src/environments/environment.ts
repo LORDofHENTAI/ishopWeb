@@ -6,14 +6,14 @@ export const environment = {
   production: false,
   // apiUrlLog: 'http://192.168.1.232:120',
   // apiUrl: 'http://192.168.1.232:120',
-  apiUrlLog: 'http://192.168.1.21:801',
-  apiUrl: 'http://192.168.1.21:801',
+  apiUrlLog: 'http://192.168.1.21:81',
+  apiUrl: 'http://192.168.1.21:81',
   // apiUrlLog: 'http://192.168.7.186:80',
   // apiUrl: 'http://192.168.7.186:80',
 
   apiUrlImg: 'https://mile.by/gtools/getImg/index.php',
   cookieName: 'user-ishope-mile',
-  listAdminsIshop: ['maksimovich_v', 'shegolov_a', 'orlova_v', 'bondarenko_v', 'fesko_n'],
+  listAdminsIshop: ['maksimovich_v', 'shegolov_a', 'orlova_v', 'bondarenko_v', 'fesko_n', 'kovalevskaya_e'],
 };
 
 /*

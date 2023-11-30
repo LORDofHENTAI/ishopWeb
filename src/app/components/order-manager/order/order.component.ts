@@ -162,6 +162,7 @@ export class OrderComponent implements OnInit {
       i.count_g = i.count_e
     })
     this.completButtonStatus = false
+    this.isDataChanged = true
   }
   getAdminIshop(): boolean {
     return environment.listAdminsIshop.includes(this.tokenService.getLogin().toLowerCase());
@@ -261,6 +262,7 @@ export class OrderComponent implements OnInit {
 
 
     if (!this.orderBodyAnsw.belPost || (this.orderBodyAnsw.belPost && this.belpostBarcodes.length > 0)) {
+      console.log('++++')
       let order = new Changer(this.tokenService.getToken(), this.orderBodyAnsw, this.tokenService.getLogin());
       this.orderService.orderSaveChange(order).subscribe({
         next: response => {
