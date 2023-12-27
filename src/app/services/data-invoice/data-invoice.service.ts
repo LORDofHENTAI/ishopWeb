@@ -6,6 +6,7 @@ import { ManagerModel } from 'src/app/models/invoice-models/managerModel';
 import { DirectorModel } from 'src/app/models/invoice-models/directormodel';
 import { TokenService } from '../token/token.service';
 import { RequestModel } from 'src/app/models/invoice-models/requestmodel';
+import { Status } from 'src/app/models/status';
 @Injectable({
   providedIn: 'root'
 })
@@ -27,29 +28,26 @@ export class DataInvoiceService {
   getManagers(data): Observable<Array<ManagerModel>> {
     return this.http.get<Array<ManagerModel>>(`${this.getManager}${data}/`);
   }
-  createManagers(data: ManagerModel): Observable<string> {
-    console.log(data)
-    return this.http.post<string>(this.createManager, data)
+  createManagers(data: ManagerModel): Observable<Status> {
+    return this.http.post<Status>(this.createManager, data)
   }
-  updateManagers(data: ManagerModel): Observable<string> {
-    console.log(data)
-    return this.http.post<string>(this.updateManager, data)
+  updateManagers(data: ManagerModel): Observable<Status> {
+    return this.http.post<Status>(this.updateManager, data)
   }
-  deleteManagers(data: RequestModel): Observable<string> {
-    return this.http.post<string>(this.deleteManager, data)
+  deleteManagers(data: RequestModel): Observable<Status> {
+    return this.http.post<Status>(this.deleteManager, data)
   }
 
   getDirectors(data): Observable<Array<DirectorModel>> {
     return this.http.get<Array<DirectorModel>>(`${this.getDirector}token=${data}`)
   }
-  createDirectors(data: DirectorModel): Observable<string> {
-    console.log(data)
-    return this.http.post<string>(this.createDirector, data)
+  createDirectors(data: DirectorModel): Observable<Status> {
+    return this.http.post<Status>(this.createDirector, data)
   }
-  updateDirectors(data: DirectorModel): Observable<string> {
-    return this.http.post<string>(this.updateDirector, data)
+  updateDirectors(data: DirectorModel): Observable<Status> {
+    return this.http.post<Status>(this.updateDirector, data)
   }
-  deleteDirectors(data: RequestModel): Observable<string> {
-    return this.http.post<string>(this.deleteDirector, data)
+  deleteDirectors(data: RequestModel): Observable<Status> {
+    return this.http.post<Status>(this.deleteDirector, data)
   }
 }

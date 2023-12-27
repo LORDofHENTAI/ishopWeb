@@ -223,11 +223,25 @@ export class OrderListFormComponent implements OnInit {
     this.orderService.orderPause(pauseOrderReq).subscribe({
       next: response => {
         if (response.status) {
-          if (element.status === 'не принят')
-            element.status = 'ОТЛОЖЕН';
-          else
-            if (element.status === 'ОТЛОЖЕН')
-              element.status = 'не принят';
+          switch (response.status) {
+            case 'true':
+              if (element.status === 'не принят')
+                element.status = 'ОТЛОЖЕН';
+              else
+                if (element.status === 'ОТЛОЖЕН')
+                  element.status = 'не принят';
+              break;
+            case 'null':
+              this.snackbarService.openSnackBar('Подзаказ не найден', this.action, this.styleNoConnect)
+              break;
+            case 'error':
+              this.snackbarService.openSnackBar('Ошибка', this.action, this.styleNoConnect);
+              break
+            case 'BadAuth':
+              this.snackbarService.openSnackBar('Токен устарел', this.action, this.styleNoConnect);
+              break
+          }
+
         }
       },
       error: error => {
@@ -255,8 +269,16 @@ export class OrderListFormComponent implements OnInit {
     let toCassa = new ToCassa(this.tokenService.getToken(), element.order.num, element.order.sub_num);
     this.orderService.orderWriteToCashbox(toCassa).subscribe({
       next: response => {
-        if (response.status === 'true') {
-          this.snackbarService.openSnackBar('Заказ записан в кассу!', this.action);
+        switch (response.status) {
+          case 'true':
+            this.snackbarService.openSnackBar('Заказ записан в кассу!', this.action);
+            break
+          case 'error':
+            this.snackbarService.openSnackBar('Ошибка записи в кассу', this.action, this.styleNoConnect);
+            break;
+          case 'BadAuth':
+            this.snackbarService.openSnackBar('Токен устарел', this.action, this.styleNoConnect)
+            break
         }
       },
       error: error => {
@@ -297,15 +319,14 @@ export class OrderListFormComponent implements OnInit {
       data: { element: element },
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result.status) {
         let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num, this.tokenService.getLogin(), `${element.order.num}.${element.place}`);
         this.orderService.orderReturn(pauseOrderReq).subscribe({
           next: response => {
-            switch (response) {
-              case 'auth error':
+            switch (response.status) {
+              case 'BadAtuth':
                 this.snackbarService.openSnackBar('Неверная идентификация.', this.action, this.styleNoConnect);
                 break;
-
               case 'fail':
                 this.snackbarService.openSnackBar('Неверный запрос.', this.action, this.styleNoConnect);
                 break;
@@ -314,7 +335,7 @@ export class OrderListFormComponent implements OnInit {
                 this.snackbarService.openSnackBar('Подзаказ не найден.', this.action, this.styleNoConnect);
                 break;
 
-              case 'status error':
+              case 'error':
                 this.snackbarService.openSnackBar('Статус заказа не соотвествует.', this.action, this.styleNoConnect);
                 break;
 
@@ -354,13 +375,24 @@ export class OrderListFormComponent implements OnInit {
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num, this.tokenService.getLogin(), `${element.order.num}.${element.place}`);
     this.orderService.orderDelete(pauseOrderReq).subscribe({
       next: response => {
-        if (response === 'true') {
-          this.snackbarService.openSnackBar('Подзаказ удален', this.action,);
-          if (this.searchValue)
-            this.searchOrder(this.searchValue);
-          else this.loadData(null);
+
+        switch (response.status) {
+          case 'true':
+            this.snackbarService.openSnackBar('Подзаказ удален', this.action,);
+            if (this.searchValue)
+              this.searchOrder(this.searchValue);
+            else this.loadData(null);
+            break
+          case 'error':
+            this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
+            break;
+          case 'BadAuth':
+            this.snackbarService.openSnackBar('Токен устарел', this.action, this.styleNoConnect);
+            break
+          case 'null':
+            this.snackbarService.openSnackBar('Некорректный запрос', this.action, this.styleNoConnect);
+            break
         }
-        else this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
       },
       error: error => {
         console.log(error);
@@ -385,8 +417,19 @@ export class OrderListFormComponent implements OnInit {
     let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '', this.tokenService.getLogin());
     this.orderService.orderSendToBitrix(findOrderReq).subscribe({
       next: response => {
-        if (response) {
-          this.snackbarService.openSnackBar('Отправлено в OMS', this.action);
+        switch (response.status) {
+          case 'true':
+            this.snackbarService.openSnackBar('Отправлено в OMS', this.action);
+            break
+          case 'error':
+            this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
+            break;
+          case 'BadAuth':
+            this.snackbarService.openSnackBar('Токен устарел', this.action, this.styleNoConnect)
+            break
+          case 'null':
+            this.snackbarService.openSnackBar('Некорректный запрос', this.action, this.styleNoConnect)
+            break;
         }
       },
       error: error => {
@@ -426,21 +469,36 @@ export class OrderListFormComponent implements OnInit {
       disableClose: true,
     });
     compliteDialog.afterClosed().subscribe(result => {
-      console.log(result);
-      if (result === 'OMS')
-        this.snackbarService.openSnackBar('Заказ отправлен в OMS', this.action);
-      if (result === 'Assembly')
-        this.snackbarService.openSnackBar('Заказ отправлен в сборку', this.action);
-      if (result === 'AssemblyError')
-        this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
-      if (result === 'Cassa')
-        this.snackbarService.openSnackBar('Заказ отправлен в кассу', this.action);
-      if (result === 'Complete')
-        this.snackbarService.openSnackBar('Заказ завершен', this.action);
-      if (result === 'returnToRetail')
-        this.snackbarService.openSnackBar('Заказ возвращен в секцию', this.action);
-      if (result === false)
-        this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
+      switch (result) {
+        case 'OMS':
+          this.snackbarService.openSnackBar('Заказ отправлен в OMS', this.action);
+          break
+        case 'Assembly':
+          this.snackbarService.openSnackBar('Заказ отправлен в сборку', this.action);
+          break
+        case 'AssemblyError':
+          this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect)
+          break;
+        case 'Cassa':
+          this.snackbarService.openSnackBar('Заказ отправлен в кассу', this.action);
+          break;
+        case 'Complete':
+          this.snackbarService.openSnackBar('Заказ завершен', this.action);
+          break;
+        case 'returnToRetail':
+          this.snackbarService.openSnackBar('Заказ возвращен в секцию', this.action);
+          break;
+        case 'error':
+          this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect);
+          break;
+        case 'BadAuth':
+          this.snackbarService.openSnackBar('Токен устарел', this.action, this.styleNoConnect);
+          break;
+        case 'null':
+          this.snackbarService.openSnackBar('Некоректный запрос', this.action, this.styleNoConnect);
+          break;
+
+      }
     });
   }
 
@@ -480,13 +538,23 @@ export class DeleteDialog {
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num, this.tokenService.getLogin(), `${element.order.num}.${String(element.place)}`);
     this.orderService.orderDelete(pauseOrderReq).subscribe({
       next: response => {
-        if (response = 'true') {
-          this.snackbarService.openSnackBar('Подзаказ удален', this.action,);
-          if (this.searchValue)
-            this.orderList.searchOrder(this.searchValue);
-          else this.orderList.loadData(null);
+        switch (response.status) {
+          case 'true':
+            this.snackbarService.openSnackBar('Подзаказ удален', this.action,);
+            if (this.searchValue)
+              this.orderList.searchOrder(this.searchValue);
+            else this.orderList.loadData(null);
+            break
+          case 'error':
+            this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
+            break;
+          case 'BadAuth':
+            this.snackbarService.openSnackBar('Токен устарел', this.action, this.styleNoConnect);
+            break
+          case 'null':
+            this.snackbarService.openSnackBar('Некорректный запрос', this.action, this.styleNoConnect);
+            break
         }
-        else this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
       },
       error: error => {
         console.log(error);
@@ -518,13 +586,24 @@ export class CompliteDialog {
     let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, element.order.name, this.tokenService.getLogin());
     this.orderService.orderCompliteOrder(findOrderReq).subscribe({
       next: response => {
-        if (response) {
-          this.dialogRef.close('Complete');
+        switch (response.status) {
+          case 'true':
+            this.dialogRef.close('Complete');
+            break
+          case 'BadAuth':
+            this.dialogRef.close('BadAuth');
+            break
+          case 'null':
+            this.dialogRef.close('null');
+            break
+          case 'error':
+            this.dialogRef.close('error');
+            break
         }
       },
       error: error => {
         console.log(error);
-        this.dialogRef.close(false);
+        this.dialogRef.close('error');
       }
     });
   }
@@ -534,13 +613,25 @@ export class CompliteDialog {
     let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, element.order.name, this.tokenService.getLogin());
     this.orderService.orderSendToBitrix(findOrderReq).subscribe({
       next: response => {
-        if (response) {
-          this.dialogRef.close('OMS');
+        switch (response.status) {
+          case 'true':
+            this.dialogRef.close('OMS')
+            break
+          case 'error':
+            this.dialogRef.close('error')
+            break;
+          case 'BadAuth':
+            this.dialogRef.close('BadAuth')
+            break
+          case 'null':
+            this.dialogRef.close('null')
+            break
+
         }
       },
       error: error => {
         console.log(error);
-        this.dialogRef.close(false);
+        this.dialogRef.close('error');
       }
     });
   }
@@ -550,14 +641,21 @@ export class CompliteDialog {
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), id, this.tokenService.getLogin(), order_num);
     this.orderService.orderReturnToAssembly(pauseOrderReq).subscribe({
       next: response => {
-        if (response = 'true')
-          this.dialogRef.close('Assembly');
-        else
-          this.dialogRef.close('AssemblyError');
+        switch (response.status) {
+          case 'true':
+            this.dialogRef.close('Assembly')
+            break
+          case 'error':
+            this.dialogRef.close('AssemblyError')
+            break;
+          case 'BadAuth':
+            this.dialogRef.close('BadAuth')
+            break
+        }
       },
       error: error => {
         console.log(error);
-        this.dialogRef.close(false);
+        this.dialogRef.close('error');
       }
     });
   }
@@ -567,14 +665,21 @@ export class CompliteDialog {
     let toCassa = new ToCassa(this.tokenService.getToken(), element.order.num, element.order.sub_num);
     this.orderService.orderWriteToCashbox(toCassa).subscribe({
       next: response => {
-        console.log(response)
-        if (response = 'true') {
-          this.dialogRef.close('Cassa')
+        switch (response.status) {
+          case 'true':
+            this.dialogRef.close('Cassa')
+            break
+          case 'error':
+            this.dialogRef.close('error')
+            break;
+          case 'BadAuth':
+            this.dialogRef.close('BadAuth')
+            break
         }
       },
       error: error => {
         console.log(error);
-        this.dialogRef.close(false);
+        this.dialogRef.close('error');
       }
     });
   }
@@ -584,14 +689,21 @@ export class CompliteDialog {
     let returnToRetailOrder = new PauseOrderReq(this.tokenService.getToken(), element.order.sub_num, this.tokenService.getLogin(), `${element.order.num}.${element.place}`);
     this.orderService.orderReturnToRetail(returnToRetailOrder).subscribe({
       next: response => {
-        console.log(response);
-        if (response = 'true') {
-          this.dialogRef.close('returnToRetail');
+        switch (response.status) {
+          case 'true':
+            this.dialogRef.close('returnToRetail')
+            break
+          case 'error':
+            this.dialogRef.close('error')
+            break;
+          case 'BadAuth':
+            this.dialogRef.close('BadAuth')
+            break
         }
       },
       error: error => {
         console.log(error);
-        this.dialogRef.close(false);
+        this.dialogRef.close('error');
       }
     });
   }

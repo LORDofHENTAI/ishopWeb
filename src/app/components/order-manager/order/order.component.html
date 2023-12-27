@@ -122,7 +122,8 @@
             *ngIf="orderStatus === 'завершен'">
             Завершить заказ
         </button>
-        <button id="save" mat-stroked-button (click)="onSaveChanges()" [disabled]="!isDataChanged">
+        <button id="save" mat-stroked-button (click)="onSaveChanges()"
+            [disabled]="!isDataChanged || disableSaveButton === true">
             Сохранить изменения
         </button>
         <button id="save" mat-stroked-button style="background-color: darkorange; color: white;"

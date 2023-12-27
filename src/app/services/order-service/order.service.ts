@@ -47,7 +47,6 @@ export class OrderService {
   getOrders(data: OrderListReq): Observable<Array<OrderListAnsw>> {
     return this.http.post<any>(`${this.urlGetOders}`, data);
   }
-
   orderSearch(data: FindOrderReq): Observable<Array<OrderListAnsw>> {
     return this.http.post<any>(`${this.urlOrderSearch}`, data);
   }
@@ -60,8 +59,8 @@ export class OrderService {
     return this.http.post<any>(`${this.urlGetSuborder}`, data);
   }
 
-  orderPause(data: PauseOrderReq): Observable<any> {
-    return this.http.post<any>(`${this.urlPause}`, data);
+  orderPause(data: PauseOrderReq): Observable<Status> {
+    return this.http.post<Status>(`${this.urlPause}`, data);
   }
 
   orderGo(data: any): Observable<any> {
@@ -72,46 +71,44 @@ export class OrderService {
     return this.http.post<any>(`${this.urlOrder}`, data);
   }
 
-  orderWriteToCashbox(data: ToCassa): Observable<any> {
-    return this.http.post<any>(`${this.urlToCassa}`, data);
+  orderWriteToCashbox(data: ToCassa): Observable<Status> {
+    return this.http.post<Status>(`${this.urlToCassa}`, data);
   }
 
-  orderReturnToAssembly(data: PauseOrderReq): Observable<string> {
-    return this.http.post<string>(`${this.urlReturnToAssembly}`, data);
+  orderReturnToAssembly(data: PauseOrderReq): Observable<Status> {
+    return this.http.post<Status>(`${this.urlReturnToAssembly}`, data);
   }
 
   getBarcode(data: BelPostReq): Observable<BelPostAnsw> {
     return this.http.post<BelPostAnsw>(`${this.urlBelpost}`, data);
   }
 
-  orderReturn(data: PauseOrderReq): Observable<string> {
-    return this.http.post<string>(`${this.urlReturn}`, data);
+  orderReturn(data: PauseOrderReq): Observable<Status> {
+    return this.http.post<Status>(`${this.urlReturn}`, data);
   }
 
-  orderDelete(data: PauseOrderReq): Observable<string> {
-    return this.http.post<string>(`${this.urlDlete}`, data);
+  orderDelete(data: PauseOrderReq): Observable<Status> {
+    return this.http.post<Status>(`${this.urlDlete}`, data);
   }
 
-  orderSendToBitrix(data: FindOrderReq): Observable<string> {
-    console.log(data);
-    return this.http.post<string>(`${this.urlToBitrix}`, data);
+  orderSendToBitrix(data: FindOrderReq): Observable<Status> {
+    return this.http.post<Status>(`${this.urlToBitrix}`, data);
   }
 
-  orderSaveChange(data: Changer): Observable<string> {
-    return this.http.post<string>(`${this.urlSaveChange}`, data);
+  orderSaveChange(data: Changer): Observable<Status> {
+    return this.http.post<Status>(`${this.urlSaveChange}`, data);
   }
 
-  orderDeleteBelpostBarcode(data: DelPostRequest): Observable<string> {
-    return this.http.post<string>(`${this.urlDelpost}`, data);
+  orderDeleteBelpostBarcode(data: DelPostRequest): Observable<Status> {
+    return this.http.post<Status>(`${this.urlDelpost}`, data);
   }
 
-  orderCompliteOrder(data: FindOrderReq): Observable<string> {
-    console.log(data);
-    return this.http.post<string>(`${this.urlEndOrder}`, data);
+  orderCompliteOrder(data: FindOrderReq): Observable<Status> {
+    return this.http.post<Status>(`${this.urlEndOrder}`, data);
   }
 
-  orderReturnToRetail(data: PauseOrderReq): Observable<string> {
-    return this.http.post<string>(`${this.urlReturnToRetail}`, data);
+  orderReturnToRetail(data: PauseOrderReq): Observable<Status> {
+    return this.http.post<Status>(`${this.urlReturnToRetail}`, data);
   }
 
   orderStatusHistory(data: orderHistoryReq): Observable<orderHistoryRes[]> {

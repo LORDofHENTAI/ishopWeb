@@ -4,6 +4,7 @@ import { DirectorModel } from 'src/app/models/invoice-models/directormodel';
 import { ManagerModel } from 'src/app/models/invoice-models/managerModel';
 import { RequestModel } from 'src/app/models/invoice-models/requestmodel';
 import { DataInvoiceService } from 'src/app/services/data-invoice/data-invoice.service';
+import { SnakebarService } from 'src/app/services/snakebar/snakebar.service';
 import { TokenService } from 'src/app/services/token/token.service';
 @Component({
   selector: 'app-data-invoice-dialog',
@@ -14,8 +15,12 @@ export class DataInvoiceDialogComponent implements OnInit {
 
   displayedColumns: string[] = ['ФИО', 'Должность', 'Действие'];
   displayedColumns1: string[] = ['ФИО', 'Место хранения', 'Доверенность', 'Должность', 'Должность по тексту', 'Действие'];
-  constructor(private dataInvoiceService: DataInvoiceService, private tokenService: TokenService) {
+  constructor(private dataInvoiceService: DataInvoiceService, private tokenService: TokenService, private snackBarService: SnakebarService) {
   }
+  messageNoConnect = 'Нет соединения, попробуйте позже.';
+  action = 'Ok';
+  styleNoConnect = 'red-snackbar';
+
   managerList: Array<ManagerModel> = [new ManagerModel(0, '', '')]
   directorsList: Array<DirectorModel> = [new DirectorModel(0, '', 0, '')]
   manager_fio: string;
@@ -79,8 +84,21 @@ export class DataInvoiceDialogComponent implements OnInit {
     const createManager = new ManagerModel(0, this.manager_fio, this.job_title)
     this.dataInvoiceService.createManagers(createManager).subscribe({
       next: result => {
-        if (result = 'true')
-          this.getMangers()
+        switch (result.status) {
+          case 'true':
+            this.getMangers()
+            this.snackBarService.openSnackBar('Менеджер добавлен', this.action);
+            break
+          case 'null':
+            this.snackBarService.openSnackBar('Пустое значение', this.action, this.styleNoConnect);
+            break
+          case 'error':
+            this.snackBarService.openSnackBar('Ошибка', this.action, this.styleNoConnect);
+            break
+          case 'BadAuth':
+            this.snackBarService.openSnackBar('Токен не дейсивителен', this.action, this.styleNoConnect);
+            break
+        }
         this.manager_fio = ''
         this.job_title = ''
       },
@@ -94,8 +112,21 @@ export class DataInvoiceDialogComponent implements OnInit {
     this.dataInvoiceService.updateManagers(updateManager).subscribe({
       next: result => {
         console.log(result)
-        if (result = 'true')
-          this.getMangers();
+        switch (result.status) {
+          case 'true':
+            this.getMangers()
+            this.snackBarService.openSnackBar('Менеджер обновлен', this.action);
+            break
+          case 'null':
+            this.snackBarService.openSnackBar('Пустое значение', this.action, this.styleNoConnect);
+            break
+          case 'error':
+            this.snackBarService.openSnackBar('Ошибка', this.action, this.styleNoConnect);
+            break
+          case 'BadAuth':
+            this.snackBarService.openSnackBar('Токен не дейсивителен', this.action, this.styleNoConnect);
+            break
+        }
         this.editable = !this.editable
         this.manager_fio = ''
         this.job_title = ''
@@ -110,8 +141,21 @@ export class DataInvoiceDialogComponent implements OnInit {
     const deleteManager = new RequestModel(this.tokenService.getToken(), element)
     this.dataInvoiceService.deleteManagers(deleteManager).subscribe({
       next: result => {
-        if (result = 'true')
-          this.getMangers()
+        switch (result.status) {
+          case 'true':
+            this.getMangers()
+            this.snackBarService.openSnackBar('Менеджер удален', this.action);
+            break
+          case 'null':
+            this.snackBarService.openSnackBar('Пустое значение', this.action, this.styleNoConnect);
+            break
+          case 'error':
+            this.snackBarService.openSnackBar('Ошибка', this.action, this.styleNoConnect);
+            break
+          case 'BadAuth':
+            this.snackBarService.openSnackBar('Токен не дейсивителен', this.action, this.styleNoConnect);
+            break
+        }
       },
       error: error => {
         console.log(error)
@@ -135,8 +179,21 @@ export class DataInvoiceDialogComponent implements OnInit {
     const createDirector = new DirectorModel(0, this.director_fio, this.storelock, this.dover, this.dolj, this.doc_dolj)
     this.dataInvoiceService.createDirectors(createDirector).subscribe({
       next: result => {
-        if (result = 'true')
-          this.getDirectors()
+        switch (result.status) {
+          case 'true':
+            this.getDirectors()
+            this.snackBarService.openSnackBar('Директор добавлен', this.action);
+            break
+          case 'null':
+            this.snackBarService.openSnackBar('Пустое значение', this.action, this.styleNoConnect);
+            break
+          case 'error':
+            this.snackBarService.openSnackBar('Ошибка', this.action, this.styleNoConnect);
+            break
+          case 'BadAuth':
+            this.snackBarService.openSnackBar('Токен не дейсивителен', this.action, this.styleNoConnect);
+            break
+        }
         this.director_fio = ''
         this.storelock = null
         this.dover = ''
@@ -152,8 +209,21 @@ export class DataInvoiceDialogComponent implements OnInit {
     const updateDirector = new DirectorModel(this.updateId, this.director_fio, this.storelock, this.dover, this.dolj, this.doc_dolj)
     this.dataInvoiceService.updateDirectors(updateDirector).subscribe({
       next: result => {
-        if (result = 'true')
-          this.getDirectors()
+        switch (result.status) {
+          case 'true':
+            this.getDirectors()
+            this.snackBarService.openSnackBar('Директор обновлен', this.action);
+            break
+          case 'null':
+            this.snackBarService.openSnackBar('Пустое значение', this.action, this.styleNoConnect);
+            break
+          case 'error':
+            this.snackBarService.openSnackBar('Ошибка', this.action, this.styleNoConnect);
+            break
+          case 'BadAuth':
+            this.snackBarService.openSnackBar('Токен не дейсивителен', this.action, this.styleNoConnect);
+            break
+        }
         this.editable = !this.editable
         this.director_fio = ''
         this.storelock = null
@@ -170,8 +240,21 @@ export class DataInvoiceDialogComponent implements OnInit {
     const deleteDirector = new RequestModel(this.tokenService.getToken(), element)
     this.dataInvoiceService.deleteDirectors(deleteDirector).subscribe({
       next: result => {
-        if (result = 'true')
-          this.getDirectors()
+        switch (result.status) {
+          case 'true':
+            this.getDirectors()
+            this.snackBarService.openSnackBar('Директор удален', this.action);
+            break
+          case 'null':
+            this.snackBarService.openSnackBar('Пустое значение', this.action, this.styleNoConnect);
+            break
+          case 'error':
+            this.snackBarService.openSnackBar('Ошибка', this.action, this.styleNoConnect);
+            break
+          case 'BadAuth':
+            this.snackBarService.openSnackBar('Токен не дейсивителен', this.action, this.styleNoConnect);
+            break
+        }
       },
       error: error => {
         console.log(error)

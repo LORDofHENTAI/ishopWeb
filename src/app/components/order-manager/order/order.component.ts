@@ -242,7 +242,7 @@ export class OrderComponent implements OnInit {
     element.changed = false;
     this.isDataChanged = this.checkDataChanged();
   }
-
+  disableSaveButton: boolean = false
   onSaveChanges(): void {
     // this.dataSource.map(element => {
     //   if(element.count_gСhange)
@@ -262,16 +262,24 @@ export class OrderComponent implements OnInit {
 
 
     if (!this.orderBodyAnsw.belPost || (this.orderBodyAnsw.belPost && this.belpostBarcodes.length > 0)) {
-      console.log('++++')
       let order = new Changer(this.tokenService.getToken(), this.orderBodyAnsw, this.tokenService.getLogin());
+      this.disableSaveButton = true;
       this.orderService.orderSaveChange(order).subscribe({
         next: response => {
-          if (response = 'true') {
-            this.snackbarService.openSnackBar('Количество изменено', this.action);
-            this.getData(this.orderBodyAnsw);
-          }
-          if (response = 'false') {
-            this.snackbarService.openSnackBar('Перезагрузите страницу', this.action);
+          switch (response.status) {
+            case 'true':
+              this.snackbarService.openSnackBar('Количество изменено', this.action);
+              this.getData(this.orderBodyAnsw);
+              this.disableSaveButton = false;
+              break;
+            case 'error':
+              this.snackbarService.openSnackBar('Ошибка, перезагрузите страницу', this.action, this.styleNoConnect);
+              this.disableSaveButton = false;
+              break;
+            case 'BadAuth':
+              this.snackbarService.openSnackBar('Токен устарел', this.action, this.styleNoConnect);
+              this.disableSaveButton = false;
+              break
           }
         },
         error: error => {
@@ -349,25 +357,31 @@ export class OrderComponent implements OnInit {
       data: { barcode: barcode, sub_num: sub_num }
     });
     deleteDialog.afterClosed().subscribe(result => {
-      if (result === true) {
-        this.snackbarService.openSnackBar('Штрихкод Белпочты удален', this.action);
-        let orderBodyReq = new OrderBodyReq(this.tokenService.getToken(), this.orderId)
-        this.orderService.getSuborder(orderBodyReq).subscribe({
-          next: response => {
-            if (response) {
-              this.getData(response);
+      switch (result) {
+        case "true":
+          this.snackbarService.openSnackBar('Штрихкод Белпочты удален', this.action);
+          let orderBodyReq = new OrderBodyReq(this.tokenService.getToken(), this.orderId)
+          this.orderService.getSuborder(orderBodyReq).subscribe({
+            next: response => {
+              if (response) {
+                this.getData(response);
+              }
+            },
+            error: error => {
+              console.log(error);
             }
-          },
-          error: error => {
-            console.log(error);
-          }
-        });
-      }
-      else
-        if (result === false) {
+          });
+          break;
+        case 'error':
           this.snackbarService.openSnackBar('Операция не выполнена', this.action, this.styleNoConnect);
-        }
-
+          break;
+        case 'BadAuth':
+          this.snackbarService.openSnackBar('Токен не действителен', this.action, this.styleNoConnect);
+          break;
+        case 'null':
+          this.snackbarService.openSnackBar('Пустое значение', this.action, this.styleNoConnect);
+          break;
+      }
     });
   }
 
@@ -386,7 +400,21 @@ export class OrderComponent implements OnInit {
     let pauseOrderReq = new PauseOrderReq(this.tokenService.getToken(), this.orderBodyAnsw.sub_num, this.tokenService.getLogin(), `${this.orderBodyAnsw.num}.${this.orderBodyAnsw.place}`);
     this.orderService.orderPause(pauseOrderReq).subscribe({
       next: response => {
-        this.orderStatus = 'ОТЛОЖЕН'
+        switch (response.status) {
+          case 'true':
+            this.orderStatus = 'ОТЛОЖЕН'
+            break
+          case 'null':
+            this.snackbarService.openSnackBar('Подзаказ не найден', this.action, this.styleNoConnect);
+            break;
+          case 'error':
+            this.snackbarService.openSnackBar('Ошибка', this.action, this.styleNoConnect)
+            break;
+          case 'BadAuth':
+            this.snackbarService.openSnackBar('Токен устарел', this.action, this.styleNoConnect)
+            break;
+        }
+
       },
       error: error => {
         console.log(error);
@@ -429,15 +457,24 @@ export class BelpostDelete {
     let delPostRequest = new DelPostRequest(this.tokenService.getToken(), this.sub_num, this.barcode);
     this.orderService.orderDeleteBelpostBarcode(delPostRequest).subscribe({
       next: response => {
-        console.log(response);
-        if (response = 'true') {
-          this.dialogRef.close(true);
+        switch (response.status) {
+          case 'true':
+            this.dialogRef.close('true');
+            break
+          case 'BadAuth':
+            this.dialogRef.close('BadAuth');
+            break
+          case 'null':
+            this.dialogRef.close('null');
+            break
+          case 'error':
+            this.dialogRef.close('error');
+            break
         }
-
       },
       error: error => {
         console.log(error);
-        this.dialogRef.close(false);
+        this.dialogRef.close('error');
       }
     });
   }
@@ -463,13 +500,24 @@ export class orderCompleteDialog {
     let findOrderReq = new FindOrderReq(this.tokenService.getToken(), this.data.orderBodyAnsw.num, '', this.tokenService.getLogin());
     this.orderService.orderCompliteOrder(findOrderReq).subscribe({
       next: response => {
-        if (response) {
-          this.dialogRef.close('Complete');
+        switch (response.status) {
+          case 'true':
+            this.dialogRef.close('Complete');
+            break
+          case 'BadAuth':
+            this.dialogRef.close('BadAuth');
+            break
+          case 'null':
+            this.dialogRef.close('null');
+            break
+          case 'error':
+            this.dialogRef.close('error');
+            break
         }
       },
       error: error => {
         console.log(error);
-        this.dialogRef.close(false);
+        this.dialogRef.close('error');
       }
     });
   }
