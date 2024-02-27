@@ -30,7 +30,7 @@ export class OrderService {
   urlToCassa = this.urlOrder + '/cassa/';
   urlPause = this.urlOrder + '/pause/';
   urlBelpost = this.urlOrder + '/belpost/';
-  urlReturn = this.urlOrder + '/back/';
+  urlReturn = this.urlOrder + '/back/';  //! delete
   urlReturnToAssembly = this.urlOrder + '/backorder/';
   urlDlete = this.urlOrder + '/delete/';
   urlToBitrix = this.urlOrder + '/oms/';
@@ -83,7 +83,7 @@ export class OrderService {
     return this.http.post<BelPostAnsw>(`${this.urlBelpost}`, data);
   }
 
-  orderReturn(data: PauseOrderReq): Observable<Status> {
+  orderReturn(data: PauseOrderReq): Observable<Status> { //! delete
     return this.http.post<Status>(`${this.urlReturn}`, data);
   }
 

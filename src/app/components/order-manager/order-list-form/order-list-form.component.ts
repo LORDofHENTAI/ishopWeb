@@ -186,7 +186,7 @@ export class OrderListFormComponent implements OnInit {
       if (searchValue.order && this.getShop(searchValue.shop) === this.data) {
         this.searchValue = searchValue;
         if (this.searchValue.check === false) {
-          let findOrderReq = new FindOrderReq(this.tokenService.getToken(), searchValue.order, this.data, this.tokenService.getLogin());
+          let findOrderReq = new FindOrderReq(this.tokenService.getToken(), searchValue.order, this.data);
           this.orderService.orderSearch(findOrderReq).subscribe({
             next: response => {
               if (response) {
@@ -414,7 +414,7 @@ export class OrderListFormComponent implements OnInit {
         t.unsubscribe();
       }
     });
-    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '', this.tokenService.getLogin());
+    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, '');
     this.orderService.orderSendToBitrix(findOrderReq).subscribe({
       next: response => {
         switch (response.status) {
@@ -583,7 +583,7 @@ export class CompliteDialog {
 
   onColickCompleteOrder(element: OrderListAnsw = this.data.element) {
     this.disableButton = true;
-    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, element.order.name, this.tokenService.getLogin());
+    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, element.order.name);
     this.orderService.orderCompliteOrder(findOrderReq).subscribe({
       next: response => {
         switch (response.status) {
@@ -610,7 +610,7 @@ export class CompliteDialog {
 
   onClickSendToBitrix(element: OrderListAnsw = this.data.element) {
     this.disableButton = true;
-    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, element.order.name, this.tokenService.getLogin());
+    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), element.order.num, element.order.name);
     this.orderService.orderSendToBitrix(findOrderReq).subscribe({
       next: response => {
         switch (response.status) {

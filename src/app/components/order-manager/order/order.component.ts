@@ -199,7 +199,7 @@ export class OrderComponent implements OnInit {
       }
     });
     this.getBelpostBarcodes(this.orderBodyAnsw.postCode);
-    this.orderService.orderSearch(new FindOrderReq(this.tokenService.getToken(), this.orderBodyAnsw.num, this.orderBodyAnsw.name, this.tokenService.getLogin())).subscribe({
+    this.orderService.orderSearch(new FindOrderReq(this.tokenService.getToken(), this.orderBodyAnsw.num, this.orderBodyAnsw.name)).subscribe({
       next: response => {
         if (response)
           this.orderStatus = response[0].status;
@@ -497,7 +497,7 @@ export class orderCompleteDialog {
 
   }
   onColickCompleteOrder() {
-    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), this.data.orderBodyAnsw.num, '', this.tokenService.getLogin());
+    let findOrderReq = new FindOrderReq(this.tokenService.getToken(), this.data.orderBodyAnsw.num, '');
     this.orderService.orderCompliteOrder(findOrderReq).subscribe({
       next: response => {
         switch (response.status) {
