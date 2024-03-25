@@ -1,39 +1,83 @@
-<!-- <mat-form-field appearance="outline">
-    <mat-label>Выберите дату</mat-label>
-    <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-</mat-form-field> -->
 <div class="main">
-    <div class="input-conteiner">
-        <mat-form-field appearance="outline">
-            <mat-label>Номер заказа</mat-label>
-            <input type="text" matInput placeholder="Введите номер заказа" [(ngModel)]="searchOrder"
-                (keyup.enter)="getHistoryByOrder()">
-        </mat-form-field>
-        <button mat-raised-button (click)="getHistoryByOrder()" [disabled]="!searchOrder">Отобразить</button>
-        <button mat-raised-button (click)="getHistory()">Отобразить все</button>
+    <div class="filter-conteiner">
+        <div class="filter-conteiner-box">
+            <mat-form-field appearance="outline">
+                <mat-label>Выберите дату c:</mat-label>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="startDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Выберите дату по:</mat-label>
+                <input matInput [matDatepicker]="picker1" [(ngModel)]="endDate">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+            <button mat-raised-button (click)="getHistory()">Отобрать</button>
+            <button mat-raised-button (click)="clearFilter()">Очистить</button>
+            <button mat-raised-button (click)="exportExcel()">
+                <img src="../../../../assets/png-transparent-microsoft-excel-computer-icons-microsoft-template-angle-text.png"
+                    style="width: 35px; height: 35px;">
+                Export
+            </button>
+        </div>
+        <div class="filter-conteiner-box">
+            <mat-form-field appearance="outline">
+                <mat-label>Склад:</mat-label>
+                <mat-select [(ngModel)]="selectedStore">
+                    <mat-option *ngFor="let s of storeList" [value]="s.status">{{s.statusName}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Статус:</mat-label>
+                <mat-select [(ngModel)]="selectedStatus">
+                    <mat-option *ngFor="let st of statusList" [value]="st.status">{{st.statusName}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Тип доставки:</mat-label>
+                <mat-select [(ngModel)]="selectedDelivery">
+                    <mat-option *ngFor="let d of deliveryTypes" [value]="d.status">{{d.statusName}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>ФИО пользователя</mat-label>
+                <input matInput type="text" [(ngModel)]="selectedUser">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Заказ</mat-label>
+                <input matInput type="text" [(ngModel)]="selectedOrder">
+            </mat-form-field>
+        </div>
     </div>
-
-    <div class="table-container">
+    <div class="table-conteiner">
         <table>
             <tr>
-                <th *ngFor="let h of displayedColumns">
-                    {{h}}
-                </th>
+                <td *ngFor="let c of displayedColumns">
+                    {{c}}
+                </td>
             </tr>
-            <tr *ngFor="let rows of historyList| slice: 0: 200" class="row-table">
+            <tr *ngFor="let i of logsList">
                 <td>
-                    {{rows.order}}
+                    {{i.login}}
                 </td>
                 <td>
-                    {{rows.statusChanged}}
+                    {{i.fio}}
                 </td>
                 <td>
-                    {{rows.userLogin}}
+                    {{i.order}}
                 </td>
                 <td>
-                    {{rows.date | date:'yyyy-MM-dd // HH:mm:ss'}}
+                    {{i.deliveryType | trueStatus: 'delivery'}}
+                </td>
+                <td>
+                    {{i.sklad | trueStatus: 'store'}}
+                </td>
+                <td>
+                    {{i.status | trueStatus: 'status'}}
+                </td>
+                <td>
+                    {{i.actionDate|date: 'dd.MM.yyyy HH:mm:ss'}}
                 </td>
             </tr>
         </table>

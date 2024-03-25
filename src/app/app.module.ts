@@ -69,7 +69,7 @@ import { SafeUrlPipe } from './pipes/safeUrl.pipe';
 import { DataInvoiceDialogComponent } from './components/navbar/data-invoice-dialog/data-invoice-dialog.component';
 import { OrderHistoryFormComponent } from './components/order-manager/order-history-form/order-history-form.component';
 import { InstructionDialogComponent } from './components/navbar/instruction-dialog/instruction-dialog.component';
-
+import { trueStatus } from './pipes/translateShitStatus.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -108,6 +108,7 @@ import { InstructionDialogComponent } from './components/navbar/instruction-dial
     DataInvoiceDialogComponent,
     OrderHistoryFormComponent,
     InstructionDialogComponent,
+    trueStatus
   ],
   imports: [
     BrowserModule,

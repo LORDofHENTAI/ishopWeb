@@ -69,6 +69,7 @@
                             <ng-template ngSwitchCase="24">Независимости</ng-template>
                             <ng-template ngSwitchCase="32">Жукова</ng-template>
                             <ng-template ngSwitchCase="34">Экспобел</ng-template>
+                            <ng-template ngSwitchCase="35">Горецкого</ng-template>
                             <ng-template ngSwitchDefault> Тайный склад №8 </ng-template>
                         </a>
                     </a>
@@ -121,13 +122,14 @@
 
                         <button mat-menu-item (click)="onClickPauseOrGo(element)"
                             *ngIf="element.status === 'не принят'">
-                            <mat-icon>pause_circle_outline</mat-icon>
-                            <span>Приостановить</span>
+                            <mat-icon>play_arrow</mat-icon>
+                            <span>В сборку</span>
                         </button>
 
                         <button mat-menu-item (click)="onClickPauseOrGo(element)" *ngIf="element.status === 'ОТЛОЖЕН'">
-                            <mat-icon>play_arrow</mat-icon>
-                            <span>Возобновить</span>
+
+                            <mat-icon>pause_circle_outline</mat-icon>
+                            <span>готов к сборке</span>
                         </button>
 
                         <button mat-menu-item (click)="onClickShow(element.order.sub_num)">
@@ -207,7 +209,8 @@
                                 Завершить заказ
                             </span>
                         </button>
-                        <button mat-menu-item *ngIf="(element.status === 'завершен' || isAdminIshop)"
+                        <button mat-menu-item
+                            *ngIf="((element.status === 'завершен'||element.status === 'Выполнен'  )|| isAdminIshop)"
                             (click)="openInvoiceDialog(element, 1)">
                             <mat-icon style="color: rgb(31, 134, 134);">
                                 assignment

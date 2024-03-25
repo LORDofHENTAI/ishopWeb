@@ -67,11 +67,15 @@
         <app-order-list-form *ngIf="tabIndex === 9" [data]="'24'" (onChanged)="onChanged($event)"></app-order-list-form>
     </mat-tab>
     <mat-tab label="Жукова">
-        <app-order-list-form *ngIf="tabIndex === 10" [data]="'32'" (onChanged)="onChanged($event)">
-        </app-order-list-form>
+        <app-order-list-form *ngIf="tabIndex === 10" [data]="'32'"
+            (onChanged)="onChanged($event)"></app-order-list-form>
     </mat-tab>
     <mat-tab label="Экспобел">
-        <app-order-list-form *ngIf="tabIndex === 11" [data]="'34'" (onChanged)="onChanged($event)">
-        </app-order-list-form>
+        <app-order-list-form *ngIf="tabIndex === 11" [data]="'34'"
+            (onChanged)="onChanged($event)"></app-order-list-form>
+    </mat-tab>
+    <mat-tab label="Горецкого">
+        <app-order-list-form *ngIf="tabIndex === 12" [data]="'35'"
+            (onChanged)="onChanged($event)"></app-order-list-form>
     </mat-tab>
 </mat-tab-group>

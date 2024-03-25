@@ -26,6 +26,7 @@ import { FindOrderReq } from 'src/app/models/order-models/find-order-req';
 import { OrderListAnsw } from 'src/app/models/order-models/order-list-answ';
 import { PauseOrderReq } from 'src/app/models/order-models/pause-order-req';
 import { environment } from 'src/environments/environment';
+import { DeleteItemModel } from 'src/app/models/order-models/delete-item-model';
 
 export interface BelpostData {
   barcode: string,
@@ -44,7 +45,7 @@ export class OrderComponent implements OnInit {
   @Input() data: string;
   @ViewChild('barcodePrint', { static: true }) barcodePrint: any;
 
-  displayedColumns = ['Артикул', ' ', 'Штрихкод', 'Наименование', 'ед. изм.', 'Количество на складе', 'Требуемое количество', 'Собранное количество'];
+  displayedColumns = ['Артикул', ' ', 'Штрихкод', 'Наименование', 'ед. изм.', 'Количество на складе', 'Требуемое количество', 'Собранное количество', ''];
   displayedColumnsPrint = ['article', 'barcode', 'name', 'mes', 'count_e_s', 'count', 'countReady', 'cost'];
   dataSource: Array<OrderBody> = [new OrderBody('', '', '', '', '0', '0', '0', false, '', '', '', '')];
   client: ClientInfo = new ClientInfo('', '', '');
@@ -421,11 +422,31 @@ export class OrderComponent implements OnInit {
       }
     });
   }
-
-
+  DeleteOrderItem(element: string) {
+    this.orderService.orderDeleteItem(new DeleteItemModel(this.tokenService.getToken(), element, this.orderBodyAnsw.sub_num)).subscribe({
+      next: response => {
+        switch (response.status) {
+          case 'true':
+            this.snackbarService.openSnackBar('Элемент удален, обновите страницу', this.action);
+            break
+          case 'null':
+            this.snackbarService.openSnackBar('Элемент не найден', this.action, this.styleNoConnect);
+            break;
+          case 'error':
+            this.snackbarService.openSnackBar('Ошибка', this.action, this.styleNoConnect)
+            break;
+          case 'BadAuth':
+            this.snackbarService.openSnackBar('Токен устарел', this.action, this.styleNoConnect)
+            break;
+        }
+      },
+      error: error => {
+        console.log(error)
+        this.snackbarService.openSnackBar(this.messageNoConnect, this.action, this.styleNoConnect)
+      }
+    })
+  }
 }
-
-
 
 @Component({
   selector: 'belpost-delete-dialog.html',
